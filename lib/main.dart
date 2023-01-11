@@ -5,14 +5,17 @@ import 'package:merchant_watches/appication/other/logs/login_provider.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/presentation/others/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main()  {
+  // WidgetsFlutterBinding.ensureInitialized();
+  
+
   // final GoogleMapsFlutterPlatform mapsImplementation =
   //     GoogleMapsFlutterPlatform.instance;
   // if (mapsImplementation is GoogleMapsFlutterAndroid) {
   //   mapsImplementation.useAndroidViewSurface = true;
   // }
-
   runApp(const MyApp());
 }
 
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => BottomNavBarProvider(),
         ),
-         ChangeNotifierProvider(
+        ChangeNotifierProvider(
           create: (context) => Loginprovider(),
         ),
         ChangeNotifierProvider(
@@ -36,9 +39,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-
         theme: ThemeData(
-          
           fontFamily: GoogleFonts.righteous().fontFamily,
           primarySwatch: Colors.blue,
         ),

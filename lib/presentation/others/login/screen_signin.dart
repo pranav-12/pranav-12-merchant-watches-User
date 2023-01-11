@@ -6,7 +6,9 @@ import 'package:merchant_watches/domain/models/user_model.dart';
 import 'package:merchant_watches/infrastructure/login/login_services.dart';
 import 'package:merchant_watches/presentation/others/login/screen_forgot_password.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signup.dart';
+import 'package:merchant_watches/presentation/others/splash_screen.dart';
 import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenSignIn extends StatelessWidget {
   ScreenSignIn({super.key});
@@ -16,6 +18,7 @@ class ScreenSignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // log("sign in page: $validUser");pran
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -153,6 +156,12 @@ class ScreenSignIn extends StatelessWidget {
           final signIn = FieldsForUserModel(
               email: mailIdController.text, password: passwordController.text);
           await LoginServices().signIn(signIn, context);
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          sharedPreferences.setBool("isSignIn", true);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => CustomBNavBar(),
+          ));
         } catch (e) {
           log(e.toString());
         }

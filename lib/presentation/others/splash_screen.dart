@@ -1,11 +1,38 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
+import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/constants.dart';
 
-class ScreenSplash extends StatelessWidget {
+class ScreenSplash extends StatefulWidget {
   const ScreenSplash({super.key});
+
+  @override
+  State<ScreenSplash> createState() => _ScreenSplashState();
+}
+
+class _ScreenSplashState extends State<ScreenSplash> {
+  @override
+  void initState() {
+    getValidationData();
+    super.initState();
+  }
+
+  bool isSignedIn = false;
+
+  Future getValidationData() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    var obtainedUser = preferences.getBool("isSignIn");
+    setState(() {
+      isSignedIn = obtainedUser ?? false;
+    });
+    log(obtainedUser.toString());
+    log(isSignedIn.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +64,8 @@ class ScreenSplash extends StatelessWidget {
                 progressColor: primaryFontColor,
                 onAnimationEnd: () => Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => ScreenSignIn(),
+                    builder: (context) =>
+                        isSignedIn == false ? ScreenSignIn() : CustomBNavBar(),
                   ),
                 ),
               )

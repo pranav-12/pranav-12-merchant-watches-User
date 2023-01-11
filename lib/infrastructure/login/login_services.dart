@@ -45,6 +45,7 @@ class LoginServices {
   }
 
   Future<void> sendOTP(String email) async {
+    log(email);
     try {
       log("${baseUrl + authUrl + sendOTPUrl}?email=$email");
       // http://localhost:5000/auth/otp?email=pranav17472@gmail.com
@@ -52,7 +53,7 @@ class LoginServices {
           await dio.get("${baseUrl + authUrl + sendOTPUrl}?email=$email");
       log(response.statusCode.toString());
     } on DioError catch (e) {
-      log(e.message);
+      log("dioERROR--------------------" + e.message);
       // log(e.response!.statusMessage.toString());
       log(e.error);
     } catch (e) {
@@ -64,19 +65,17 @@ class LoginServices {
     try {
       Response response =
           await dio.post(baseUrl + authUrl + sendOTPUrl, data: otp.toJson());
-      if (response.statusCode == 200) {
-        log(response.extra.toString());
-      } else {}
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 1),
-          content: const Text('OTP Verified SuccessFully'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        ),
-      );
+      if (response.statusCode == 200)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 1),
+            content: const Text('OTP Verified SuccessFully'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          ),
+        );
     } on DioError catch (error) {
       if (error.response!.statusCode == 401) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -156,12 +155,10 @@ class LoginServices {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           ),
         );
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => CustomBNavBar(),
-        ));
       }
       log(response.statusMessage.toString());
     } on DioError catch (err) {
+      log(err.message);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 1),

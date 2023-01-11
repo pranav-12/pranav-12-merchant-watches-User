@@ -1,16 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/user_model.dart';
 import 'package:merchant_watches/infrastructure/login/login_services.dart';
-import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
 
 class ScreenForgotPassword extends StatelessWidget {
   ScreenForgotPassword({super.key});
-  final formkey = GlobalKey<FormState>();
+  final formkeyForForgotPass = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -26,7 +23,7 @@ class ScreenForgotPassword extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Form(
           // autovalidateMode: AutovalidateMode.onUserInteraction,
-          key: formkey,
+          key: formkeyForForgotPass,
           child: Column(children: [
             TextFormField(
               controller: emailController,
@@ -110,7 +107,7 @@ class ScreenForgotPassword extends StatelessWidget {
         ),
       );
     } else {
-      if (formkey.currentState!.validate()) {
+      if (formkeyForForgotPass.currentState!.validate()) {
         try {
           final forgotPass = FieldsForUserModel(
               email: emailController.text,

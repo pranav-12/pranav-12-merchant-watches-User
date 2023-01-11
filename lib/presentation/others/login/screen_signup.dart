@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/domain/models/user_model.dart';
 import 'package:merchant_watches/infrastructure/login/login_services.dart';
 import 'package:merchant_watches/presentation/others/login/screen_otp.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
@@ -20,7 +19,7 @@ class ScreenSignUp extends StatelessWidget {
         child: Consumer<Loginprovider>(
             builder: (context, value, child) => value.isLoading == false
                 ? Form(
-                    key: value.formKey,
+                    key: value.formKeyForSignUp,
                     child:
                         ListView(padding: const EdgeInsets.all(10), children: [
                       const Text(
@@ -165,7 +164,7 @@ class ScreenSignUp extends StatelessWidget {
                           TextButton(
                             onPressed: () => Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                              builder: (context) =>  ScreenSignIn(),
+                              builder: (context) => ScreenSignIn(),
                             )),
                             child: const Text(
                               'SignIn',
@@ -202,12 +201,12 @@ class ScreenSignUp extends StatelessWidget {
         ),
       );
     } else {
-      if (value.formKey.currentState!.validate()) {
+      if (value.formKeyForSignUp.currentState!.validate()) {
         LoginServices().sendOTP(value.emailController.text);
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ScreenOTPVerification(email: value.emailController.text,value: value),
+          builder: (context) => ScreenOTPVerification(
+              email: value.emailController.text, value: value),
         ));
-       
       }
     }
   }
