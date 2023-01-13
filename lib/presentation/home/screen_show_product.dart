@@ -7,13 +7,10 @@ import 'package:provider/provider.dart';
 import '../../constants/list.dart';
 
 class ScreenShowProductDetails extends StatelessWidget {
-  const ScreenShowProductDetails({super.key});
+  ScreenShowProductDetails({super.key, required this.index});
+  int index;
   @override
   Widget build(BuildContext context) {
-    Future.delayed(
-      Duration.zero,
-      () => context.read<ProductDetailsProvider>().initState(imagevariation),
-    );
     Size size = MediaQuery.of(context).size;
     return Scaffold(
 // appbar
@@ -27,68 +24,55 @@ class ScreenShowProductDetails extends StatelessWidget {
       ),
       body: ListView(padding: const EdgeInsets.all(12), children: [
 // sized Box for that contains the top images
-        SizedBox(
-          height: MediaQuery.of(context).size.height / 3,
-          child: Row(
-            children: [
-// coloum for selecting the colors sections
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  growable: true,
-                  listColors.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Consumer<ProductDetailsProvider>(
-                      builder: (context, value, child) => InkWell(
-                        onTap: () {
-                          value.initState(allImages[index]);
-                        },
-                        child: CircleAvatar(
-                          radius: 10,
-                          backgroundColor: listColors[index],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              ksizedBoxWidth20,
-// this for showing the top images of the page
-              Consumer<ProductDetailsProvider>(
-                builder: (context, value, child) => Image.network(
-                    "https://cdn.shopify.com/s/files/1/0997/6284/products/Side04.png?v=1671685358"
-                    // value.imageAllvariation[value.imgList]
-                    ),
-              ),
-            ],
+        Container(
+          decoration: BoxDecoration(
+              color: Colors.black, borderRadius: BorderRadius.circular(15),),
+              padding: EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height / 2.5,
+          child: Consumer<ProductDetailsProvider>(
+            builder: (context, value, child) => Image.network(
+                productDataList.value[index]["image"][value.imgList]),
           ),
         ),
-        ksizedBoxheight50,
+
+        // Padding(
+        //   padding: const EdgeInsets.only(left: 0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: List.generate(
+        //       0,
+        //       (index) => SizedBox(
+        //           height: 25,
+        //           child: VerticalDivider(
+        //             color: Colors.black,
+        //             width: 10,
+        //             thickness: 5,
+        //           )),
+        //     ),
+        //   ),
+        // ),
+
+        ksizedBoxheight10,
 // container for each photo every angle
         Container(
           height: size.width / 6,
           decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(30),
-          ),
+              color: Colors.black, borderRadius: BorderRadius.circular(15)),
           child: Consumer<ProductDetailsProvider>(
             builder: (context, value, child) => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 growable: true,
-                value.imageAllvariation.length,
-                (index) => Card(
+                4,
+                (index1) => Card(
                   color: Colors.transparent,
                   elevation: 0,
                   child: InkWell(
                       onTap: () {
-                        value.changeImage(index);
+                        value.changeImage(index1);
                       },
                       child: Image.network(
-                          "https://cdn.shopify.com/s/files/1/0997/6284/products/Side04.png?v=1671685358"
-                          // value.imageAllvariation[index]
-                          )),
+                          productDataList.value[index]["image"][index1])),
                 ),
               ),
             ),
@@ -96,34 +80,25 @@ class ScreenShowProductDetails extends StatelessWidget {
         ),
         ksizedBoxheight20,
 // row for showing the title and color of the watches
-        Row(
-          children: const [
-            Text(
-              'Color Fit Pulse Grand',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              ' - Jet Black',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            )
-          ],
+        Text(
+          productDataList.value[index]["name"],
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+
         ksizedBoxheight10,
 // text for description for the watch
-        const Text(
-          "CONNECTIVITYSystem Requirement : iOS 8.0 &  or Android 6.0 & BT : v5.3 , Display technology : TFT ,Size : 1.28 ,Resolution : 240*240,Brightness : 500 nits,Cloud-based watch faces : Yes,Typical Usage Time : 7 days,Standby Time : 25 days,Capacity : 290mAh,Charging Time : Up to 2.5 hours,Charging Cable : Yes",
-          maxLines: 5,
-          style: TextStyle(
+        Text(
+          productDataList.value[index]["description"],
+          // maxLines: 5,
+          style: const TextStyle(
             fontSize: 15,
           ),
         ),
         ksizedBoxheight20,
 // rate for watch
-        const Text(
-          "₹2999",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        Text(
+          "₹ ${productDataList.value[index]["price"]}",
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         ksizedBoxheight10,
 // container contains the full section of the qty
@@ -184,7 +159,7 @@ class ScreenShowProductDetails extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => CheckoutScreen(),
+                  builder: (context) => const CheckoutScreen(),
                 ));
               },
               child: const Text(
@@ -194,24 +169,24 @@ class ScreenShowProductDetails extends StatelessWidget {
             )
           ],
         ),
-        ksizedBoxheight20,
-        const Text(
-          'Overview',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        ksizedBoxheight20,
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const ScrollPhysics(),
-          itemBuilder: (context, index) => Container(
-            decoration: BoxDecoration(color: cartImageColor),
-            child: Image.network(overView[index]),
-          ),
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 10,
-          ),
-          itemCount: overView.length,
-        )
+        // ksizedBoxheight20,
+        // const Text(
+        //   'Overview',
+        //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        // ),
+        // ksizedBoxheight20,
+        // ListView.separated(
+        //   shrinkWrap: true,
+        //   physics: const ScrollPhysics(),
+        //   itemBuilder: (context, index) => Container(
+        //     decoration: BoxDecoration(color: cartImageColor),
+        //     child: Image.network(overView[index]),
+        //   ),
+        //   separatorBuilder: (context, index) => const SizedBox(
+        //     height: 10,
+        //   ),
+        //   itemCount: overView.length,
+        // )
       ]),
     );
   }

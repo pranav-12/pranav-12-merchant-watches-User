@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
@@ -10,8 +11,7 @@ import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
 import 'package:provider/provider.dart';
 
 class ScreenSignUp extends StatelessWidget {
-  const ScreenSignUp({super.key});
-
+  ScreenSignUp({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +47,8 @@ class ScreenSignUp extends StatelessWidget {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'name is empty';
+                          } else if (value.length < 5) {
+                            return 'name must have 5 letters';
                           }
                           return null;
                         },
@@ -72,6 +74,7 @@ class ScreenSignUp extends StatelessWidget {
                               .hasMatch(value.emailController.text)) {
                             return 'Check your email';
                           }
+                          // return null;
                           return null;
                         },
                       ),
@@ -96,6 +99,8 @@ class ScreenSignUp extends StatelessWidget {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'password is empty';
+                          } else if (value.length < 5) {
+                            return 'passwords must have 5 letters';
                           }
                           return null;
                         },
@@ -202,11 +207,34 @@ class ScreenSignUp extends StatelessWidget {
       );
     } else {
       if (value.formKeyForSignUp.currentState!.validate()) {
-        LoginServices().sendOTP(value.emailController.text);
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ScreenOTPVerification(
-              email: value.emailController.text, value: value),
-        ));
+        try {
+          Response? response = await LoginServices.instance
+              .checkUser(value.emailController.text);
+
+          if (response!.statusCode == 200) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('User already exist'),
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            return;
+          }
+          log("message");
+          LoginServices().sendOTP(value.emailController.text);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ScreenOTPVerification(
+                  email: value.emailController.text, value: value),
+            ),
+          );
+        } catch (e) {
+          log("signUpButton: $e");
+          value.isLoadingFunc(false);
+        }
       }
     }
   }

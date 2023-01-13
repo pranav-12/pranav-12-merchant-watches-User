@@ -27,7 +27,7 @@ class ScreenOTPVerification extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         children: [
           Image.asset(
-              "assets/2fa-authentication-password-secure-notice-login-verification-sms-with-push-code-message-shield-icon-smartphone-phone-laptop-computer-pc-flat_212005-139.webp"),
+              "assets/2fa-authentication-password-secure-notice-login-verification-sms-with-push-code-message-shield-icon-smartphone-phone-laptop-computer-pc-flat_212005-139-removebg-preview.png"),
           Container(
             height: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -59,7 +59,20 @@ class ScreenOTPVerification extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      LoginServices().sendOTP(email);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.green,
+                          content: Text('OTP Resended!'),
+                        ),
+                      );
+                    },
                     child: const Text(
                       'Resend OTP',
                       style:
@@ -123,10 +136,11 @@ class ScreenOTPVerification extends StatelessWidget {
         ),
       );
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) =>  ScreenSignIn(),
+        builder: (context) => ScreenSignIn(),
       ));
     } catch (e) {
-      log(e.toString());
+      log("otp verify:  $e");
+      value.isLoadingFunc(false);
     }
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
+String? userId;
+
 Color primaryFontColor = const Color.fromARGB(255, 203, 178, 106);
 Color primaryBackgroundColor = Colors.black;
 // 189, 195, 199
@@ -18,4 +20,4 @@ const ksizedBoxWidth20 = SizedBox(width: 20);
 
 ValueNotifier<List> productDataList = ValueNotifier([]);
 
-List cartItems = [];
+ValueNotifier<List> cartDataList = ValueNotifier([]);

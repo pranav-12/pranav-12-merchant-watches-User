@@ -8,8 +8,11 @@ import 'package:merchant_watches/presentation/profile/screen_profile.dart';
 import 'package:merchant_watches/presentation/wishlist/screen_wishlist.dart';
 import 'package:provider/provider.dart';
 
+import '../../domain/models/user_model.dart';
+
 class CustomBNavBar extends StatelessWidget {
-  CustomBNavBar({super.key});
+
+  CustomBNavBar({super.key, });
 // List for bottom nav bar items
   final List<BottomNavigationBarItem> iconListForBNavBarList = [
     const BottomNavigationBarItem(

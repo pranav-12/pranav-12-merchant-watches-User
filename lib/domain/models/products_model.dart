@@ -13,6 +13,7 @@ class GetProductModel {
 }
 
 class ProductDatas {
+  String? id;
   String? name;
   int? price;
   String? description;
@@ -30,6 +31,7 @@ class ProductDatas {
   });
 
   ProductDatas({
+    this.id,
     this.name,
     this.price,
     this.description,
@@ -40,6 +42,7 @@ class ProductDatas {
 
   factory ProductDatas.fromJson(Map<String, dynamic> json) {
     return ProductDatas(
+      id: json["_id"],
       name: json["name"],
       price: json["price"],
       description: json["description"],
@@ -50,6 +53,7 @@ class ProductDatas {
   }
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "name": name,
         "price": price,
         "description": description,

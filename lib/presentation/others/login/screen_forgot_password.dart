@@ -112,11 +112,10 @@ class ScreenForgotPassword extends StatelessWidget {
           final forgotPass = FieldsForUserModel(
               email: emailController.text,
               password: newPasswordController.text);
-          LoginServices().forgotPassword(forgotPass,context);
-        
-        }
-        
-         catch (e) {
+          LoginServices().forgotPassword(forgotPass);
+
+          Navigator.of(context).pop();
+        } catch (e) {
           log(e.toString());
         }
       }

@@ -9,6 +9,7 @@ class UserModel {
 }
 
 class FieldsForUserModel {
+  String? id;
   String? fullname;
   String? email;
   String? password;
@@ -20,6 +21,7 @@ class FieldsForUserModel {
   });
 
   FieldsForUserModel({
+    this.id,
     this.fullname,
     this.email,
     this.password,
@@ -27,6 +29,7 @@ class FieldsForUserModel {
 
   factory FieldsForUserModel.fromJson(Map<String, dynamic> json) =>
       FieldsForUserModel(
+        id: json["_id"],
         fullname: json["fullname"],
         email: json["email"],
         password: json["password"],
@@ -36,5 +39,6 @@ class FieldsForUserModel {
         "fullname": fullname,
         "email": email,
         "password": password,
+        "_id": id,
       };
 }

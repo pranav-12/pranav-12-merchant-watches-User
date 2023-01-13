@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:merchant_watches/appication/bottom_nav_bar_provider.dart';
+import 'package:merchant_watches/appication/cart/cart_provider.dart';
+import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/presentation/others/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-void main()  {
+void main() {
   // WidgetsFlutterBinding.ensureInitialized();
-  
 
   // final GoogleMapsFlutterPlatform mapsImplementation =
   //     GoogleMapsFlutterPlatform.instance;
@@ -34,6 +34,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProductDetailsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
         )
       ],
       child: MaterialApp(

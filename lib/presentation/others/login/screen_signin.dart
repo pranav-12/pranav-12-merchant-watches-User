@@ -6,7 +6,6 @@ import 'package:merchant_watches/domain/models/user_model.dart';
 import 'package:merchant_watches/infrastructure/login/login_services.dart';
 import 'package:merchant_watches/presentation/others/login/screen_forgot_password.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signup.dart';
-import 'package:merchant_watches/presentation/others/splash_screen.dart';
 import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,6 +48,17 @@ class ScreenSignIn extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
+                  validator: (value1) {
+                    if (value1!.isEmpty) {
+                      return 'email is empty';
+                    } else if (!RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(mailIdController.text)) {
+                      return 'Check your email';
+                    }
+                    // return null;
+                    return null;
+                  },
                 ),
                 ksizedBoxheight20,
                 TextFormField(
@@ -62,6 +72,14 @@ class ScreenSignIn extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'password is empty';
+                    } else if (value.length < 5) {
+                      return 'passwords must have 5 letters';
+                    }
+                    return null;
+                  },
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -151,17 +169,12 @@ class ScreenSignIn extends StatelessWidget {
         ),
       );
     } else {
+      // log(forkeyForSignIn.currentState!.validate().toString());
       if (forkeyForSignIn.currentState!.validate()) {
         try {
           final signIn = FieldsForUserModel(
               email: mailIdController.text, password: passwordController.text);
           await LoginServices().signIn(signIn, context);
-          SharedPreferences sharedPreferences =
-              await SharedPreferences.getInstance();
-          sharedPreferences.setBool("isSignIn", true);
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => CustomBNavBar(),
-          ));
         } catch (e) {
           log(e.toString());
         }

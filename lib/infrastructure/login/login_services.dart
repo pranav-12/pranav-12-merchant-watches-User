@@ -1,13 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
+import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/otp_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/models/user_model.dart';
-import '../../presentation/others/login/screen_signin.dart';
 import '../../presentation/widgets/bottom_navigation_bar.dart';
 
 class LoginServices {
@@ -53,7 +57,7 @@ class LoginServices {
           await dio.get("${baseUrl + authUrl + sendOTPUrl}?email=$email");
       log(response.statusCode.toString());
     } on DioError catch (e) {
-      log("dioERROR--------------------" + e.message);
+      log("dioERROR--------------------${e.message}");
       // log(e.response!.statusMessage.toString());
       log(e.error);
     } catch (e) {
@@ -65,8 +69,8 @@ class LoginServices {
     try {
       Response response =
           await dio.post(baseUrl + authUrl + sendOTPUrl, data: otp.toJson());
-      if (response.statusCode == 200)
-        ScaffoldMessenger.of(context).showSnackBar(
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 1),
             content: const Text('OTP Verified SuccessFully'),
@@ -76,6 +80,7 @@ class LoginServices {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           ),
         );
+      }
     } on DioError catch (error) {
       if (error.response!.statusCode == 401) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -95,7 +100,8 @@ class LoginServices {
   }
 
   Future<void> forgotPassword(
-      FieldsForUserModel value, BuildContext context) async {
+    FieldsForUserModel value,
+  ) async {
     log(baseUrl + authUrl + forgotPasswordUrl);
     try {
       Response response = await dio.post(baseUrl + authUrl + forgotPasswordUrl,
@@ -103,7 +109,7 @@ class LoginServices {
       log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 1),
             content: const Text('Password updated successfully'),
@@ -113,13 +119,11 @@ class LoginServices {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => ScreenSignIn(),
-        ));
+        Navigator.of(navigatorKey.currentContext!).pop();
       }
     } on DioError catch (err) {
       if (err.response!.statusCode == 400) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 1),
             content: const Text('Invalid emailId'),
@@ -143,8 +147,12 @@ class LoginServices {
         "email": value.email.toString(),
         "password": value.password.toString()
       });
-      log(response.statusCode.toString());
+      // log(response.statusCode.toString());
+      log("res: =====${response.statusCode}");
       if (response.statusCode == 200) {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setBool("isSignIn", true);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 1),
@@ -155,14 +163,22 @@ class LoginServices {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           ),
         );
+        checkUser(value.email.toString());
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => CustomBNavBar(),
+        ));
       }
-      log(response.statusMessage.toString());
+      // log(response.statusMessage.toString());
+
     } on DioError catch (err) {
-      log(err.message);
+      int? statustCode = err.response!.statusCode;
+      log("dioError-====-====-====${err.response!.statusCode}");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 1),
-          content: const Text('Invalid user'),
+          content: statustCode == 401
+              ? const Text('Invalid mailId')
+              : const Text('Invalid password'),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape:
@@ -172,5 +188,33 @@ class LoginServices {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  Future<Response?> checkUser(String userEmail) async {
+    // http://127.0.0.1:5000/users/?email=pranavn17472@gmail.com
+    log("$baseUrl/users/?email=$userEmail");
+    log(userEmail);
+    try {
+      Response response = await dio.get("$baseUrl/users/?email=$userEmail");
+
+      log(response.data.toString());
+      // userId.clear();
+      // log(userId.toString());
+      final user = FieldsForUserModel.fromJson(jsonDecode(response.data));
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString("UserId", user.id!);
+      // sharedPreferences.setStringList("User",userId);
+      // userId.add(user);
+      // userId ;
+      log(sharedPreferences.toString());
+      return response;
+    } on DioError catch (err) {
+      log("checkuser in Dio :----${err.response}");
+      return err.response;
+    } catch (e) {
+      log('error on checkUser :====$e');
+    }
+    return null;
   }
 }

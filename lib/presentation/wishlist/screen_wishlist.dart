@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:provider/provider.dart';
-
-import '../../appication/product_details_provider/product_provider.dart';
 
 class ScreenWishList extends StatelessWidget {
   const ScreenWishList({super.key});

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ScreenGoogleMaps extends StatelessWidget {
@@ -38,7 +36,7 @@ class ScreenGoogleMaps extends StatelessWidget {
       body: Stack(
         children: [
           GoogleMap(
-            padding: EdgeInsets.all(15),
+            padding:const EdgeInsets.all(15),
             initialCameraPosition: _kGooglePlex,
             zoomControlsEnabled: true,
             mapType: MapType.hybrid,
