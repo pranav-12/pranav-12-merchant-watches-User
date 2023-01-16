@@ -143,7 +143,7 @@ class DrawerDesign extends StatelessWidget {
                 sharedPreferences.remove("isSignIn");
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) =>const ScreenSplash(),
+                      builder: (context) => const ScreenSplash(),
                     ),
                     (route) => false);
               },

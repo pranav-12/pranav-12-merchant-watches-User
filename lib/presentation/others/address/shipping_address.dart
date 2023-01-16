@@ -89,7 +89,7 @@ class ShippingAddress extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>const ShippingAddress(),
+                builder: (context) => const ShippingAddress(),
               ));
             },
             child: const Text(

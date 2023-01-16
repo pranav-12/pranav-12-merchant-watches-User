@@ -75,6 +75,7 @@ flutter:
     - assets/setting_logo/privacy-policy.png
     - assets/2fa-authentication-password-secure-notice-login-verification-sms-with-push-code-message-shield-icon-smartphone-phone-laptop-computer-pc-flat_212005-139-removebg-preview.png
     - assets/cart/empty_cart.png
+    - assets/wishList.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

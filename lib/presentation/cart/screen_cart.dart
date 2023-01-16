@@ -11,7 +11,7 @@ class ScreenCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CartService().getDataCart();
+    CartService().getDataCart(context);
     return Scaffold(
 // Appbar
       appBar: AppBar(
@@ -55,8 +55,9 @@ class ScreenCart extends StatelessWidget {
                                   decoration: BoxDecoration(
                                       color: cartImageColor,
                                       borderRadius: BorderRadius.circular(10)),
-                                  child: Image.network(
-                                     cartDataList.value[0]["cart"]["products"][0]["product"]["image"][0]
+                                  child: Image.network(cartDataList.value[0]
+                                              ["cart"]["products"][0]["product"]
+                                          ["image"][0]
                                       // imagevariation[index]
                                       ),
                                 ),
@@ -78,8 +79,9 @@ class ScreenCart extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text(
-                                      cartDataList.value[0]["cart"]["products"][0]["product"]["name"],
+                                      Text(
+                                        cartDataList.value[0]["cart"]
+                                            ["products"][0]["product"]["name"],
                                         style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
@@ -91,8 +93,9 @@ class ScreenCart extends StatelessWidget {
                                     ],
                                   ),
                                   // The Text for Color of the watch
-                                   Text(
-                                    cartDataList.value[0]["cart"]["products"][0]["product"]["description"],
+                                  Text(
+                                    cartDataList.value[0]["cart"]["products"][0]
+                                        ["product"]["description"],
                                     // maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -104,8 +107,11 @@ class ScreenCart extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text(
-                                        cartDataList.value[0]["cart"]["products"][0]["product"]["price"].toString(),
+                                      Text(
+                                        cartDataList.value[0]["cart"]
+                                                ["products"][0]["product"]
+                                                ["price"]
+                                            .toString(),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),

@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 import '../../domain/models/user_model.dart';
 
 class CustomBNavBar extends StatelessWidget {
-
-  CustomBNavBar({super.key, });
+  CustomBNavBar({
+    super.key,
+  });
 // List for bottom nav bar items
   final List<BottomNavigationBarItem> iconListForBNavBarList = [
     const BottomNavigationBarItem(
@@ -49,7 +50,7 @@ class CustomBNavBar extends StatelessWidget {
   final List pages = [
     ScreenHome(),
     const ScreenCart(),
-    const ScreenWishList(),
+     ScreenWishList(),
     const ScreenProfile()
   ];
 

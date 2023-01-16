@@ -36,7 +36,7 @@ class ScreenGoogleMaps extends StatelessWidget {
       body: Stack(
         children: [
           GoogleMap(
-            padding:const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             initialCameraPosition: _kGooglePlex,
             zoomControlsEnabled: true,
             mapType: MapType.hybrid,

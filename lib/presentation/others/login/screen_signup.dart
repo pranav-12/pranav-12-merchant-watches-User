@@ -208,21 +208,22 @@ class ScreenSignUp extends StatelessWidget {
     } else {
       if (value.formKeyForSignUp.currentState!.validate()) {
         try {
-          Response? response = await LoginServices.instance
-              .checkUser(value.emailController.text);
+          // Response? response = await LoginServices.instance
+          //     .checkUser(value.emailController.text);
 
-          if (response!.statusCode == 200) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('User already exist'),
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            return;
-          }
+          // if (response!.statusCode == 200) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       content: const Text('User already exist'),
+          //       backgroundColor: Colors.red,
+          //       shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(15),),
+          //       behavior: SnackBarBehavior.floating,
+          //     ),
+          //   );
+          //   return;
+          // }
+        
           log("message");
           LoginServices().sendOTP(value.emailController.text);
           Navigator.of(context).push(

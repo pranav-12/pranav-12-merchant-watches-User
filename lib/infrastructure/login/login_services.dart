@@ -176,9 +176,7 @@ class LoginServices {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 1),
-          content: statustCode == 401
-              ? const Text('Invalid mailId')
-              : const Text('Invalid password'),
+          content: Text(err.toString()),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape:
@@ -196,10 +194,10 @@ class LoginServices {
     log(userEmail);
     try {
       Response response = await dio.get("$baseUrl/users/?email=$userEmail");
-
-      log(response.data.toString());
+      // log(response.data.toString());
       // userId.clear();
       // log(userId.toString());
+
       final user = FieldsForUserModel.fromJson(jsonDecode(response.data));
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -214,6 +212,7 @@ class LoginServices {
       return err.response;
     } catch (e) {
       log('error on checkUser :====$e');
+      return null;
     }
     return null;
   }

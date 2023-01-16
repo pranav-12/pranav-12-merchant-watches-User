@@ -26,8 +26,10 @@ class ScreenShowProductDetails extends StatelessWidget {
 // sized Box for that contains the top images
         Container(
           decoration: BoxDecoration(
-              color: Colors.black, borderRadius: BorderRadius.circular(15),),
-              padding: EdgeInsets.all(20),
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          padding: EdgeInsets.all(20),
           height: MediaQuery.of(context).size.height / 2.5,
           child: Consumer<ProductDetailsProvider>(
             builder: (context, value, child) => Image.network(

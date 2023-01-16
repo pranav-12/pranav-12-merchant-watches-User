@@ -7,7 +7,10 @@ import 'package:merchant_watches/infrastructure/login/login_services.dart';
 import 'package:merchant_watches/presentation/others/login/screen_forgot_password.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signup.dart';
 import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../appication/home/home_provider.dart';
 
 class ScreenSignIn extends StatelessWidget {
   ScreenSignIn({super.key});
@@ -43,7 +46,7 @@ class ScreenSignIn extends StatelessWidget {
                   autocorrect: true,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'mailId ',
+                    hintText: 'email ',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -61,28 +64,35 @@ class ScreenSignIn extends StatelessWidget {
                   },
                 ),
                 ksizedBoxheight20,
-                TextFormField(
-                  controller: passwordController,
-                  autocorrect: true,
-                  obscureText: true,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    hintText: 'password ',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                Consumer<HomeProvider>(
+                  builder: (context, value, child) => TextFormField(
+                    controller: passwordController,
+                    autocorrect: true,
+                    obscureText: value.visible,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                           value.visible==true? value.visibleONOrOf(false): value.visibleONOrOf(true);
+                          },
+                          icon: Icon(Icons.remove_red_eye)),
+                      hintText: 'password ',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'password is empty';
+                      } else if (value.length < 5) {
+                        return 'passwords must have 5 letters';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'password is empty';
-                    } else if (value.length < 5) {
-                      return 'passwords must have 5 letters';
-                    }
-                    return null;
-                  },
                 ),
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(

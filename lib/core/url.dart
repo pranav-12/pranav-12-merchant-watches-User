@@ -1,4 +1,4 @@
-String baseUrl = 'http://192.168.29.124:5000';
+String baseUrl = 'http://192.168.29.123:5000';
 
 // Add,get,delete all product
 String productUrl = '/products';
@@ -19,3 +19,5 @@ String forgotPasswordUrl = '/password';
 // cart
 String userUrl = '/users';
 String cartUrl = '/cart';
+
+String wishUrl = '/wishlist';
