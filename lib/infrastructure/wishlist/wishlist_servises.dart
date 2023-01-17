@@ -20,15 +20,20 @@ class WishListServices with ChangeNotifier {
         BaseOptions(baseUrl: baseUrl, responseType: ResponseType.plain);
   }
 
-  Future<void> addOrRemoveWishList(String productId) async {
+  Future<Response?> addOrRemoveWishList(String productId) async {
     log(productId.toString());
     try {
       Response response = await dio.post('$baseUrl$wishUrl/',
           data: {"userId": userId, "product": productId});
 
       log(response.toString());
+      return response;
+    } on DioError catch (err) {
+      log(err.response.toString());
+      return err.response;
     } catch (e) {
       log(e.toString());
+      return null;
     }
   }
 
@@ -36,10 +41,11 @@ class WishListServices with ChangeNotifier {
     log('$baseUrl$wishUrl/?userId=$userId');
     try {
       Response response = await dio.get('$baseUrl$wishUrl/?userId=$userId');
-      Map<String, dynamic> map = json.decode(response.data);
+      Map<String, dynamic> data = await json.decode(response.data);
       // data = WishListModel.fromJson(map);
       wishDataList.value.clear();
-      wishDataList.value.add(WishListModel.fromJson(map));
+      wishDataList.value
+          .addAll(WishListModel.fromJson(data).products!.reversed);
       wishDataList.notifyListeners();
       log(wishDataList.value.toString());
       // for (var i = 0; i < data!.products!.length; i++) {
@@ -52,7 +58,7 @@ class WishListServices with ChangeNotifier {
     } on DioError catch (err) {
       log(err.message);
     } catch (e) {
-      log("eeee--------------" + e.toString());
+      log("eeee--------------$e");
     }
   }
 }

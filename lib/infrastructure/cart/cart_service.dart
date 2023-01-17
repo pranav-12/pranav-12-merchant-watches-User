@@ -7,12 +7,12 @@ import 'package:merchant_watches/appication/cart/cart_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/cart_model.dart';
+import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../appication/wishlist/wishlist_provider.dart';
 
-class CartService {
-  ProductCartBaseModel? val;
+class CartService with ChangeNotifier {
   final dio = Dio();
 
   CartService() {
@@ -21,21 +21,28 @@ class CartService {
       responseType: ResponseType.plain,
     );
   }
-  Future<void> addToCart(CartModel cartModel, BuildContext context) async {
-    log("cartModel:---------$cartModel");
+  Future<void> addToCart(Product product, BuildContext context) async {
+    log("cartModelproductId:---------$product");
     log('$baseUrl$cartUrl/');
     try {
       Response response = await dio.post(
         '$baseUrl$cartUrl/',
-        data: cartModel.toJson(),
+        data: {"userid": userId, "product": product.id, "qty": 1},
       );
-      if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Product added into cart')));
-      }
       log(response.toString());
     } on DioError catch (err) {
       log(err.message);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> removeFromCart(Product product) async {
+    try {
+      Response response = await dio.patch('$baseUrl$cartUrl/',
+          data: {"userid": userId, "product": product.id});
+
+      log(response.data);
     } catch (e) {
       log(e.toString());
     }
@@ -51,12 +58,12 @@ class CartService {
       // final data = CartModel.fromJson(jsonDecode(response.data));
       Map<String, dynamic> data = json.decode(response.data);
 
-      val = ProductCartBaseModel.fromJson(data);
-      // cartDataList.value.clear();
-      // cartDataList.value.add(data);
-      // cartDataList.notifyListeners();
+      final val = CartProductModel.fromJson(data);
+      cartDataList.value.clear();
+      cartDataList.value.add(val.cart);
+      cartDataList.notifyListeners();
       // log(cartDataList.value.toString());
-      Provider.of<CartProvider>(context, listen: false).cartFunc(val!);
+      // Provider.of<CartProvider>(context, listen: false).cartFunc(val!);
       // log(cartDataList.value[0]["cart"]["products"][0]["product"]["image"][0].toString());
     } on DioError catch (err) {
       log("getCart : ----${err.message}");

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:merchant_watches/domain/models/wishlist_model.dart';
+
+import '../domain/models/cart_model.dart';
+import '../domain/models/products_model.dart';
+import '../domain/models/wishlist_model.dart';
+
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -19,9 +23,9 @@ const ksizedBoxWidth20 = SizedBox(width: 20);
 
 // const Lists
 
-ValueNotifier<List> productDataList = ValueNotifier([]);
+ValueNotifier<List<Product?>> productDataList = ValueNotifier([]);
 
-ValueNotifier<List> cartDataList = ValueNotifier([]);
+ValueNotifier<List<Cart?>> cartDataList = ValueNotifier([]);
 
 // ValueNotifier<List<ProductElement>> wishDataList = ValueNotifier([]);
-ValueNotifier<List<WishListModel>> wishDataList = ValueNotifier([]);
+ValueNotifier<List<ProductElementForWishList?>> wishDataList = ValueNotifier([]);

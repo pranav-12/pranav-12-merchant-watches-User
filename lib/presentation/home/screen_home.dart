@@ -15,6 +15,7 @@ import 'package:merchant_watches/presentation/widgets/loading_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../domain/models/products_model.dart';
 import '../../infrastructure/wishlist/wishlist_servises.dart';
 
 class ScreenHome extends StatelessWidget {
@@ -26,7 +27,8 @@ class ScreenHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      ProductServices().getProducts(context);
+      // await WishListServices().getWishListData(context);
+      await ProductServices().getProducts(context);
 
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -69,7 +71,7 @@ class ScreenHome extends StatelessWidget {
                   ),
                   ValueListenableBuilder(
                     valueListenable: productDataList,
-                    builder: (context, value, child) {
+                    builder: (context, productsList, child) {
                       return GridView.count(
                         childAspectRatio: 0.66,
                         mainAxisSpacing: 10,
@@ -77,18 +79,21 @@ class ScreenHome extends StatelessWidget {
                         shrinkWrap: true,
                         crossAxisCount: 2,
                         children: List.generate(
-                          value.length,
+                          productsList.length,
                           (index) {
-                            log(cartDataList.value
-                                .contains(value[index])
-                                .toString());
+                            final product = productsList[index];
+                            log(product.toString());
+
                             return InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ScreenShowProductDetails(index: index),
-                                ),
-                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ScreenShowProductDetails(
+                                            product: productsList[index]!),
+                                  ),
+                                );
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -107,7 +112,7 @@ class ScreenHome extends StatelessWidget {
                                           height: size.width / 2.6,
                                           width: size.width,
                                           child: Image.network(
-                                            value[index]["image"][0],
+                                            product!.image![0]!,
                                             filterQuality: FilterQuality.high,
                                             fit: BoxFit.fill,
                                           ),
@@ -124,7 +129,7 @@ class ScreenHome extends StatelessWidget {
                                               color: Colors.white,
                                               width: size.width / 3.5,
                                               child: Text(
-                                                value[index]['name'],
+                                                product.name!,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                     fontSize: 18,
@@ -132,43 +137,25 @@ class ScreenHome extends StatelessWidget {
                                                         FontWeight.bold),
                                               ),
                                             ),
-                                            wishDataList.value
-                                                    .contains(value[index])
-                                                ? GestureDetector(
-                                                    onTap: () =>
-                                                        // homeProvider
-                                                        // .addOrRemoveCartFucn(
-                                                        //     true,
-                                                        //     index,
-                                                        //     context),
-                                                        WishListServices()
-                                                            .addOrRemoveWishList(
-                                                                value[index]
-                                                                    ["_id"]),
-                                                    child: const Icon(
+                                            GestureDetector(
+                                              onTap: () async {
+                                                homeProvider
+                                                    .addOrRemoveCartFucn(
+                                                  product.id!,
+                                                  context,
+                                                );
+                                              },
+                                              child: searchIDForWishList(
+                                                          product, true) ==
+                                                      true
+                                                  ? const Icon(
                                                       Icons.favorite,
                                                       color: Colors.red,
-                                                    ),
-                                                  )
-                                                : GestureDetector(
-                                                    onTap: () =>
-                                                        //  homeProvider
-                                                        //     .addOrRemoveCartFucn(
-                                                        //   false,
-                                                        //   index,
-                                                        //   context,
-                                                        // ),
-                                                        WishListServices()
-                                                            .addOrRemoveWishList(
-                                                                value[index]
-                                                                    ["_id"]),
-                                                    child: const Icon(
+                                                    )
+                                                  : const Icon(
                                                       Icons.favorite_border,
                                                     ),
-                                                  )
-                                            // IconButton(
-                                            //     onPressed: () {},
-                                            //     icon: const Icon(Icons.favorite_border),)
+                                            ),
                                           ],
                                         ),
                                         Row(
@@ -176,16 +163,25 @@ class ScreenHome extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '₹ ${value[index]['price']}',
+                                              '₹ ${product.price}',
                                               style:
                                                   const TextStyle(fontSize: 20),
                                             ),
-                                            IconButton(
-                                              onPressed: () => addToCart(
-                                                  value, index, context),
-                                              icon: const Icon(
-                                                  Icons.shopping_cart),
-                                            )
+                                            searchIDForWishList(
+                                                        product, false) ==
+                                                    false
+                                                ? IconButton(
+                                                    onPressed: () {
+                                                      CartService().addToCart(product, context);
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.shopping_cart),
+                                                  )
+                                                : SizedBox(
+                                                    width: size.width * 0.08,
+                                                    child: Image.asset(
+                                                        "assets/cart/added.png"),
+                                                  )
                                           ],
                                         ),
                                       ],
@@ -201,63 +197,39 @@ class ScreenHome extends StatelessWidget {
                   )
                 ],
               )
-            : LoadingWidget(),
+            : const LoadingWidget(),
       ),
     );
   }
 
-  void addToWishList() {}
-
-  void addToCart(List<dynamic> value, int index, BuildContext context) {
-    log(value[index]["_id"].toString());
-    // if (cartDataList.value.isNotEmpty) {
-    //   try {
-    //     for (var i = 0; i < cartDataList.value.length; i++) {
-    //       if (cartDataList.value[i]["_id"] == value[index]["_id"]) {
-    //         ScaffoldMessenger.of(context).showSnackBar(
-    //           SnackBar(
-    //             content: const Text(
-    //               'already added in cart',
-    //               style: TextStyle(
-    //                   color: Colors.white,
-    //                   fontSize: 17,
-    //                   fontWeight: FontWeight.bold),
-    //             ),
-    //             duration: const Duration(seconds: 3),
-    //             padding: const EdgeInsets.all(20),
-    //             backgroundColor: Colors.black,
-    //             elevation: 5,
-    //             shape: RoundedRectangleBorder(
-    //                 borderRadius: BorderRadius.circular(10)),
-    //             behavior: SnackBarBehavior.floating,
-    //           ),
-    //         );
-    //       } else {
-    // for (var i = 0; i < cartDataList.value.length; i++) {
-    //   Provider.of<CartProvider>(context).totalAmount = {
-    //     Provider.of<CartProvider>(context).totalAmount! +
-    //         cartDataList.value[i]["price"]
-    //   } as int?;
-    // }
-    try {
-      log(userId.toString());
-      log(value[index]["_id"]);
-
-      final cart = CartModel.create(
-        userId: userId,
-        productDatasId: value[index]["_id"],
-        qty: Provider.of<CartProvider>(context, listen: false).qty,
-      );
-      log('cart------------$cart');
-      CartService().addToCart(cart, context);
-    } catch (e) {
-      log("cartbuttonpressed:--=-=-=-=-$e");
+  bool searchIDForWishList(Product product, bool wish) {
+    bool findProductId = false;
+    if (wish == true) {
+      for (var i = 0; i < wishDataList.value.length; i++) {
+        if (wishDataList.value[i]!.product!.id == product.id) {
+          return findProductId = true;
+        }
+      }
+    } else {
+      for (var i = 0; i < cartDataList.value.length; i++) {
+        if (cartDataList.value[0]!.products![i]!.product!.id == product.id) {
+          return findProductId = true;
+        }
+      }
     }
-    //       }
-    //     }
-    //   } catch (e) {
-    //     log(e.toString());
-    //   }
-    // }
+
+    return findProductId;
   }
+
+  // void addToCart(Product product, int index, BuildContext context) {
+  //   // log(value[index]["_id"].toString());
+
+  //   try {
+  //     log(userId.toString());
+  //     // log('cart------------$cart');
+  //     CartService().addToCart(product, context);
+  //   } catch (e) {
+  //     log("cartbuttonpressed:--=-=-=-=-$e");
+  //   }
+  // }
 }

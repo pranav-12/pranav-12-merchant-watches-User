@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
@@ -12,6 +13,8 @@ class HomeProvider with ChangeNotifier {
   // List<bool> wishListClicked = [false];
 
   bool loadingBool = false;
+
+
   void loading(bool val) {
     loadingBool = val;
 
@@ -25,35 +28,28 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addOrRemoveCartFucn(bool click, int index, BuildContext context) {
+  void addOrRemoveCartFucn(String productId, BuildContext context) async {
+    try {
+      Response response =
+          await WishListServices().addOrRemoveWishList(productId) as Response;
 
-
-   
-    // if (click == true) {
-    //   // wishDataList.value.remove(productDataList.value[index]);
-    //   WishListServices()
-    //       .addOrRemoveWishList(productDataList.value[index]["_id"]);
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //         behavior: SnackBarBehavior.floating,
-    //         duration: Duration(seconds: 1),
-    //         content: const Text("Product removed Form wishList")),
-    //   );
-    //   notifyListeners();
-    // } else {
-    //   // wishDataList.value.add(productDataList.value[index]);
-    //   WishListServices()
-    //       .addOrRemoveWishList(productDataList.value[index]["_id"]);
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       behavior: SnackBarBehavior.floating,
-    //       duration: Duration(seconds: 1),
-    //       content: const Text("Product added To wishList"),
-    //     ),
-    //   );
-    //   notifyListeners();
-    // }
-    // WishListServices().addOrRemoveWishList(productDataList.value[index]["_id"]);
+      await WishListServices().getWishListData(context);
+      log('ggg');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 1),
+            backgroundColor:
+                response.statusCode == 201 ? Colors.green : Colors.red,
+            content: response.statusCode == 201
+                //  response.statusCode == 201
+                ? Text("Product Added to wishList")
+                : Text("Product Removed From wishList")),
+      );
+      notifyListeners();
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   void addUserId(String id) {

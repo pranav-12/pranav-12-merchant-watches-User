@@ -50,7 +50,7 @@ class CustomBNavBar extends StatelessWidget {
   final List pages = [
     ScreenHome(),
     const ScreenCart(),
-     ScreenWishList(),
+    const ScreenWishList(),
     const ScreenProfile()
   ];
 

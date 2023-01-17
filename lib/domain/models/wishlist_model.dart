@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:merchant_watches/domain/models/products_model.dart';
+
 WishListModel? wishListModelFromJson(String str) =>
     WishListModel.fromJson(json.decode(str));
 
@@ -19,7 +21,7 @@ class WishListModel {
 
   String? id;
   String? userId;
-  List<ProductElement?>? products;
+  List<ProductElementForWishList?>? products;
   int? v;
 
   factory WishListModel.fromJson(Map<String, dynamic> json) => WishListModel(
@@ -27,8 +29,8 @@ class WishListModel {
         userId: json["userId"],
         products: json["products"] == null
             ? []
-            : List<ProductElement?>.from(
-                json["products"]!.map((x) => ProductElement.fromJson(x))),
+            : List<ProductElementForWishList?>.from(
+                json["products"]!.map((x) => ProductElementForWishList.fromJson(x))),
         v: json["__v"],
       );
 
@@ -42,68 +44,22 @@ class WishListModel {
       };
 }
 
-class ProductElement {
-  ProductElement({
+class ProductElementForWishList {
+  ProductElementForWishList({
     this.product,
     this.id,
   });
 
-  ProductProduct? product;
+  Product? product;
   String? id;
 
-  factory ProductElement.fromJson(Map<String, dynamic> json) => ProductElement(
-        product: ProductProduct.fromJson(json["product"]),
+  factory ProductElementForWishList.fromJson(Map<String, dynamic> json) => ProductElementForWishList(
+        product: Product.fromJson(json["product"]),
         id: json["_id"],
       );
 
   Map<String, dynamic> toJson() => {
         "product": product!.toJson(),
         "_id": id,
-      };
-}
-
-class ProductProduct {
-  ProductProduct({
-    this.id,
-    this.name,
-    this.price,
-    this.description,
-    this.image,
-    this.category,
-    this.deliveryFee,
-    this.v,
-  });
-
-  String? id;
-  String? name;
-  int? price;
-  String? description;
-  List<String?>? image;
-  String? category;
-  String? deliveryFee;
-  int? v;
-
-  factory ProductProduct.fromJson(Map<String, dynamic> json) => ProductProduct(
-        id: json["_id"],
-        name: json["name"],
-        price: json["price"],
-        description: json["description"],
-        image: json["image"] == null
-            ? []
-            : List<String?>.from(json["image"]!.map((x) => x)),
-        category: json["category"],
-        deliveryFee: json["deliveryFee"],
-        v: json["__v"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-        "price": price,
-        "description": description,
-        "image": image == null ? [] : List<dynamic>.from(image!.map((x) => x)),
-        "category": category,
-        "deliveryFee": deliveryFee,
-        "__v": v,
       };
 }

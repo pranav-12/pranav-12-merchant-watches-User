@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
+import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:merchant_watches/presentation/others/checkout.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/list.dart';
 
 class ScreenShowProductDetails extends StatelessWidget {
-  ScreenShowProductDetails({super.key, required this.index});
-  int index;
+  final Product product;
+  ScreenShowProductDetails({super.key, required this.product});
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,31 +31,13 @@ class ScreenShowProductDetails extends StatelessWidget {
             color: Colors.black,
             borderRadius: BorderRadius.circular(15),
           ),
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           height: MediaQuery.of(context).size.height / 2.5,
           child: Consumer<ProductDetailsProvider>(
-            builder: (context, value, child) => Image.network(
-                productDataList.value[index]["image"][value.imgList]),
+            builder: (context, value, child) =>
+                Image.network(product.image![value.imgList]!),
           ),
         ),
-
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 0),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: List.generate(
-        //       0,
-        //       (index) => SizedBox(
-        //           height: 25,
-        //           child: VerticalDivider(
-        //             color: Colors.black,
-        //             width: 10,
-        //             thickness: 5,
-        //           )),
-        //     ),
-        //   ),
-        // ),
-
         ksizedBoxheight10,
 // container for each photo every angle
         Container(
@@ -70,11 +54,11 @@ class ScreenShowProductDetails extends StatelessWidget {
                   color: Colors.transparent,
                   elevation: 0,
                   child: InkWell(
-                      onTap: () {
-                        value.changeImage(index1);
-                      },
-                      child: Image.network(
-                          productDataList.value[index]["image"][index1])),
+                    onTap: () {
+                      value.changeImage(index1);
+                    },
+                    child: Image.network(product.image![index1]!),
+                  ),
                 ),
               ),
             ),
@@ -83,14 +67,14 @@ class ScreenShowProductDetails extends StatelessWidget {
         ksizedBoxheight20,
 // row for showing the title and color of the watches
         Text(
-          productDataList.value[index]["name"],
+          product.name!,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
 
         ksizedBoxheight10,
 // text for description for the watch
         Text(
-          productDataList.value[index]["description"],
+          product.description!,
           // maxLines: 5,
           style: const TextStyle(
             fontSize: 15,
@@ -99,7 +83,7 @@ class ScreenShowProductDetails extends StatelessWidget {
         ksizedBoxheight20,
 // rate for watch
         Text(
-          "₹ ${productDataList.value[index]["price"]}",
+          "₹ ${product.price}",
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         ksizedBoxheight10,

@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
-import 'package:merchant_watches/presentation/widgets/loading_bar.dart';
 import 'package:provider/provider.dart';
 import '../../constants/constants.dart';
 
@@ -27,10 +26,13 @@ class ProductServices with ChangeNotifier {
       // HomeProvider().loading(true);
       Response response = await dio.get(baseUrl + productUrl);
 
-      final getData = GetProductModel.fromJson(jsonDecode(response.data));
+      Map<String, dynamic> product = json.decode(response.data);
+
+      final getData = ProductsModel.fromJson(product);
       productDataList.value.clear();
-      productDataList.value.addAll(getData.products.reversed);
+      productDataList.value.addAll(getData.products!.reversed);
       productDataList.notifyListeners();
+      log(productDataList.value.toString());
       Provider.of<HomeProvider>(context, listen: false).loading(false);
     } catch (e) {
       HomeProvider().loading(false);
