@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merchant_watches/appication/cart/cart_provider.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
+import 'package:merchant_watches/presentation/cart/quantity_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../appication/product_details_provider/product_provider.dart';
@@ -13,7 +15,10 @@ class ScreenCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CartService().getDataCart(context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await CartService().getDataCart(context);
+    });
+
     return Scaffold(
 // Appbar
       appBar: AppBar(
@@ -28,14 +33,14 @@ class ScreenCart extends StatelessWidget {
       ),
 // body
       body: ListView(children: [
-        cartDataList.value.isNotEmpty
-            ? ValueListenableBuilder(
-                valueListenable: cartDataList,
-                builder: (context, cart, child) => ListView.separated(
+        ValueListenableBuilder(
+          valueListenable: cartDataList,
+          builder: (context, cart, child) => cart.isNotEmpty
+              ? ListView.separated(
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   itemBuilder: (context, index) {
-                    final cartData = cart[0]!.products![index]!.product;
+                    final cartData = cart[index]!.product;
                     return Container(
                       padding:
                           const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -63,11 +68,18 @@ class ScreenCart extends StatelessWidget {
                                         // imagevariation[index]
                                         ),
                                   ),
-                                  const Icon(
-                                    CupertinoIcons.clear_circled_solid,
-                                    size: 30,
-                                    color: Colors.red,
-                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      await CartService()
+                                          .removeFromCart(cartData);
+                                      await CartService().getDataCart(context);
+                                    },
+                                    icon: const Icon(
+                                      CupertinoIcons.clear_circled_solid,
+                                      size: 30,
+                                      color: Colors.red,
+                                    ),
+                                  )
                                 ],
                               ),
                               ksizedBoxWidth10,
@@ -99,7 +111,7 @@ class ScreenCart extends StatelessWidget {
                                               (context, homeProvider, child) =>
                                                   GestureDetector(
                                             onTap: () async {
-                                              homeProvider.addOrRemoveCartFucn(
+                                              homeProvider.addOrRemoveWishListFucn(
                                                 cartData.id!,
                                                 context,
                                               );
@@ -122,6 +134,7 @@ class ScreenCart extends StatelessWidget {
                                     Text(
                                       cartData.description!,
                                       overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                       style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),
@@ -137,36 +150,9 @@ class ScreenCart extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
                                         ),
-                                        SizedBox(
-                                          child: Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () async {
-                                                  await CartService()
-                                                      .removeFromCart(cartData);
-                                                  await CartService()
-                                                      .getDataCart(context);
-                                                },
-                                                icon: const Icon(Icons
-                                                    .remove_circle_outline),
-                                              ),
-                                              Text(cart[0]!
-                                                  .products![index]!
-                                                  .qty!
-                                                  .toString()),
-                                              IconButton(
-                                                onPressed: () async {
-                                                  await CartService().addToCart(
-                                                      cartData, context);
-                                                  await CartService()
-                                                      .getDataCart(context);
-                                                },
-                                                icon: const Icon(Icons
-                                                    .add_circle_outline_outlined),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        QuantityWidget(
+                                          
+                                            index: index),
                                       ],
                                     ),
                                   ],
@@ -181,13 +167,14 @@ class ScreenCart extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(
                     height: 5,
                   ),
-                  itemCount: cart[0]!.products!.length,
+                  itemCount: cart.length,
+                )
+              : Center(
+                  heightFactor: 1,
+                  child: Image.asset('assets/cart/empty_cart.png'),
                 ),
-              )
-            : Center(
-                heightFactor: 1,
-                child: Image.asset('assets/cart/empty_cart.png'),
-              ),
+        ),
+
 // Divider for separation
         Divider(
           thickness: 1,
@@ -214,14 +201,18 @@ class ScreenCart extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Total Quantity :',
                       style: TextStyle(fontSize: 18),
                     ),
-                    Text(
-                      '4',
-                      style: TextStyle(fontSize: 18),
+                    ValueListenableBuilder(
+                      valueListenable: totalQty,
+                      builder: (context, value, child) => Text(
+                        // value.totalQuantity().toString(),
+                        value.toString(),
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
                   ],
                 ),
@@ -233,15 +224,18 @@ class ScreenCart extends StatelessWidget {
                 ksizedBoxheight20,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       overflow: TextOverflow.visible,
                       'Total Amount :',
                       style: TextStyle(fontSize: 18),
                     ),
-                    Text(
-                      '₹12000',
-                      style: TextStyle(fontSize: 18),
+                    ValueListenableBuilder(
+                      valueListenable: totalPrice,
+                      builder: (context, value, child) => Text(
+                        "₹ $value",
+                        style: const TextStyle(fontSize: 18),
+                      ),
                     ),
                   ],
                 ),

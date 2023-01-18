@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
-
-import '../../domain/models/cart_model.dart';
+import 'package:merchant_watches/constants/constants.dart';
 
 class CartProvider with ChangeNotifier {
-  int qty = 1;
-  int? totalAmount;
+  void totalQuantity() {
+    totalQty.value = 0;
+    for (var i = 0; i < cartDataList.value.length; i++) {
+      totalQty.value = totalQty.value + cartDataList.value[i]!.qty!;
+    }
+    notifyListeners();
+  }
   // ProductCartBaseModel? cart;
 
   // void cartFunc(ProductCartBaseModel val) {

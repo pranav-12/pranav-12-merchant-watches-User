@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
+import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
 import 'package:provider/provider.dart';
 
+import '../../domain/models/products_model.dart';
 import '../home/screen_show_product.dart';
 
 class ScreenWishList extends StatelessWidget {
@@ -113,7 +115,7 @@ class ScreenWishList extends StatelessWidget {
                                                     (context, value, child) =>
                                                         IconButton(
                                                   onPressed: () {
-                                                    value.addOrRemoveCartFucn(
+                                                    value.addOrRemoveWishListFucn(
                                                         product.id!, context);
                                                   },
                                                   icon: const Icon(
@@ -153,20 +155,43 @@ class ScreenWishList extends StatelessWidget {
                                                 padding:
                                                     const EdgeInsets.all(5),
                                                 decoration: BoxDecoration(
-                                                    border: Border.all(),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Row(
-                                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    const Text('Add to'),
-                                                    SizedBox(
-                                                      height: 30,
-                                                      child: Image.asset(
-                                                          "assets/cart/bag_for_wishlist.png"),
-                                                    ),
-                                                  ],
+                                                  border: Border.all(),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Consumer<HomeProvider>(
+                                                  builder: (context, value,
+                                                          child) =>
+                                                      searchIDForWishList(
+                                                                product,
+                                                              ) ==
+                                                              false
+                                                          ? GestureDetector(
+                                                              onTap: () => value
+                                                                  .addToCart(
+                                                                      product,
+                                                                      context),
+                                                              child: Row(
+                                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  const Text(
+                                                                      'Add to'),
+                                                                  SizedBox(
+                                                                    height: 30,
+                                                                    child: Image
+                                                                        .asset(
+                                                                            "assets/cart/bag_for_wishlist.png"),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )
+                                                          : SizedBox(
+                                                              width:
+                                                                  size.width *
+                                                                      0.08,
+                                                              child: Image.asset(
+                                                                  "assets/cart/added.png"),
+                                                            ),
                                                 ),
                                               ),
                                             ],
@@ -202,5 +227,16 @@ class ScreenWishList extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool searchIDForWishList(Product product) {
+    bool findProductId = false;
+    for (var i = 0; i < cartDataList.value.length; i++) {
+      if (cartDataList.value[i]!.product!.id == product.id) {
+        return findProductId = true;
+      }
+    }
+
+    return findProductId;
   }
 }

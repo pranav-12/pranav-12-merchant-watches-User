@@ -2,11 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:merchant_watches/appication/cart/cart_provider.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/domain/models/cart_model.dart';
-import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/get_products_details/products_services.dart';
 import 'package:merchant_watches/presentation/home/screen_show_product.dart';
 import 'package:merchant_watches/presentation/home/widgets/carousel.dart';
@@ -27,7 +24,7 @@ class ScreenHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      // await WishListServices().getWishListData(context);
+      await WishListServices().getWishListData(context);
       await ProductServices().getProducts(context);
 
       SharedPreferences sharedPreferences =
@@ -73,7 +70,7 @@ class ScreenHome extends StatelessWidget {
                     valueListenable: productDataList,
                     builder: (context, productsList, child) {
                       return GridView.count(
-                        childAspectRatio: 0.66,
+                        childAspectRatio: 0.70,
                         mainAxisSpacing: 10,
                         physics: const ScrollPhysics(),
                         shrinkWrap: true,
@@ -90,7 +87,8 @@ class ScreenHome extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         ScreenShowProductDetails(
-                                            product: productsList[index]!),
+                                            product: productsList[index]!,
+                                            index: index),
                                   ),
                                 );
                               },
@@ -140,7 +138,7 @@ class ScreenHome extends StatelessWidget {
                                             GestureDetector(
                                               onTap: () async {
                                                 homeProvider
-                                                    .addOrRemoveCartFucn(
+                                                    .addOrRemoveWishListFucn(
                                                   product.id!,
                                                   context,
                                                 );
@@ -158,6 +156,7 @@ class ScreenHome extends StatelessWidget {
                                             ),
                                           ],
                                         ),
+                                        ksizedBoxheight10,
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -167,21 +166,38 @@ class ScreenHome extends StatelessWidget {
                                               style:
                                                   const TextStyle(fontSize: 20),
                                             ),
-                                            searchIDForWishList(
-                                                        product, false) ==
-                                                    false
-                                                ? IconButton(
-                                                    onPressed: () {
-                                                      CartService().addToCart(product, context);
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.shopping_cart),
-                                                  )
-                                                : SizedBox(
-                                                    width: size.width * 0.08,
-                                                    child: Image.asset(
-                                                        "assets/cart/added.png"),
-                                                  )
+                                            Container(padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: searchIDForWishList(
+                                                          product, false) ==
+                                                      false
+                                                  ? GestureDetector(
+                                                      onTap: () {
+                                                        homeProvider.addToCart(
+                                                            product, context);
+                                                      },
+                                                      child: Row(
+                                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          const Text('Add to'),
+                                                          SizedBox(
+                                                            height: 30,
+                                                            child: Image.asset(
+                                                                "assets/cart/bag_for_wishlist.png"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : SizedBox(
+                                                      width: size.width * 0.07,
+                                                      child: Image.asset(
+                                                          "assets/cart/added.png"),
+                                                    ),
+                                            )
                                           ],
                                         ),
                                       ],
@@ -211,11 +227,14 @@ class ScreenHome extends StatelessWidget {
         }
       }
     } else {
+      log('entry');
       for (var i = 0; i < cartDataList.value.length; i++) {
-        if (cartDataList.value[0]!.products![i]!.product!.id == product.id) {
+        log('---------------message');
+        if (cartDataList.value[i]!.product!.id == product.id) {
           return findProductId = true;
         }
       }
+      log(findProductId.toString());
     }
 
     return findProductId;

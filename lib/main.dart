@@ -10,13 +10,6 @@ import 'package:merchant_watches/presentation/others/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-
-  // final GoogleMapsFlutterPlatform mapsImplementation =
-  //     GoogleMapsFlutterPlatform.instance;
-  // if (mapsImplementation is GoogleMapsFlutterAndroid) {
-  //   mapsImplementation.useAndroidViewSurface = true;
-  // }
   runApp(const MyApp());
 }
 
@@ -50,7 +43,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          fontFamily: GoogleFonts.righteous().fontFamily,
+          fontFamily: GoogleFonts.kanit().fontFamily,
           primarySwatch: Colors.blue,
         ),
         home: const ScreenSplash(),

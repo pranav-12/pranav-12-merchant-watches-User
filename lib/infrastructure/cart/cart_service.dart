@@ -21,20 +21,23 @@ class CartService with ChangeNotifier {
       responseType: ResponseType.plain,
     );
   }
-  Future<void> addToCart(Product product, BuildContext context) async {
+  Future<Response?> addToCart(
+      Product product, BuildContext context, int qty) async {
     log("cartModelproductId:---------$product");
     log('$baseUrl$cartUrl/');
     try {
       Response response = await dio.post(
         '$baseUrl$cartUrl/',
-        data: {"userid": userId, "product": product.id, "qty": 1},
+        data: {"userid": userId, "product": product.id, "qty": qty},
       );
       log(response.toString());
+      return response;
     } on DioError catch (err) {
       log(err.message);
     } catch (e) {
       log(e.toString());
     }
+    return null;
   }
 
   Future<void> removeFromCart(Product product) async {
@@ -48,7 +51,9 @@ class CartService with ChangeNotifier {
     }
   }
 
-  Future<void> getDataCart(BuildContext context) async {
+// int totalAmount = 0;
+  Future<Response?> getDataCart(BuildContext context) async {
+    totalPrice.value = 0;
     log('$baseUrl$cartUrl/?userid=$userId');
     try {
       Response response = await dio.get(
@@ -59,16 +64,25 @@ class CartService with ChangeNotifier {
       Map<String, dynamic> data = json.decode(response.data);
 
       final val = CartProductModel.fromJson(data);
+      log(val.toString());
       cartDataList.value.clear();
-      cartDataList.value.add(val.cart);
+      totalPrice.value = val.cart!.totalPrice!;
+      cartDataList.value.addAll(val.cart!.products!.reversed);
       cartDataList.notifyListeners();
+      totalPrice.notifyListeners();
+      Provider.of<CartProvider>(context, listen: false).totalQuantity();
+      log(cartDataList.value.toString());
+      log("₹₹₹₹₹₹₹₹₹₹₹₹₹₹₹₹₹₹${totalPrice.value}");
+      return response;
       // log(cartDataList.value.toString());
       // Provider.of<CartProvider>(context, listen: false).cartFunc(val!);
       // log(cartDataList.value[0]["cart"]["products"][0]["product"]["image"][0].toString());
     } on DioError catch (err) {
       log("getCart : ----${err.message}");
+      return err.response;
     } catch (e) {
       log("getCart error====$e");
     }
+    return null;
   }
 }
