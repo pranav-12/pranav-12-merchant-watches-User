@@ -1,12 +1,49 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:merchant_watches/appication/other/address/address_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/presentation/others/google_maps.dart';
+import 'package:merchant_watches/domain/models/address_model.dart';
+import 'package:merchant_watches/infrastructure/others/address/address_servises.dart';
+import 'package:merchant_watches/presentation/widgets/textformfield_.dart';
+import 'package:provider/provider.dart';
+
+enum ActionType {
+  addAddress,
+  updateAddress,
+}
 
 class ShippingAddress extends StatelessWidget {
-  const ShippingAddress({super.key});
+  final String? id;
+  final ActionType type;
+  final Address? address;
+
+  const ShippingAddress({super.key, required this.type, this.id,this.address});
 
   @override
   Widget build(BuildContext context) {
+    if (type == ActionType.updateAddress) {
+      log("id##########  $id");
+      if (id == null) {
+        Navigator.of(context).pop();
+      }
+      final address = AddressServices().getNoteByID(id!);
+      // final address = addressDataList.value[index!];
+      if (address == null) {
+        Navigator.of(context).pop();
+      }
+
+      final addressProvider =
+          Provider.of<AddressProvider>(context, listen: false);
+      addressProvider.fullNameController.text = address!.fullName ?? "No Name";
+      addressProvider.addressController.text = address.address ?? "No Address";
+      addressProvider.phoneController.text = address.phone ?? "No phone";
+      addressProvider.stateController.text = address.state ?? "No state";
+      addressProvider.placeController.text = address.place ?? "No place";
+      addressProvider.pinController.text = address.pin ?? "No pin";
+    }
+    // log(index.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
@@ -21,83 +58,136 @@ class ShippingAddress extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(15),
-        children: [
-          TextFormField(
-            cursorColor: primaryBackgroundColor,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(),
-              hintText: 'Full Name',
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          ksizedBoxheight10,
-          TextFormField(
-            cursorColor: primaryBackgroundColor,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.call),
-              border: OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(),
-              hintText: 'Phone Number',
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          ksizedBoxheight10,
-          TextFormField(
-            maxLines: 5,
-            cursorColor: primaryBackgroundColor,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: InputDecoration(
-              suffixIconColor: primaryFontColor,
-              border: const OutlineInputBorder(),
-              enabledBorder: const OutlineInputBorder(),
-              suffixIcon: const Icon(Icons.location_on),
-              hintText: 'Address',
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          TextButton.icon(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ScreenGoogleMaps(),
+      body: Consumer<AddressProvider>(
+        builder: (context, addProv, child) {
+          return Form(
+            key: addProv.formKeyForAddress,
+            child: ListView(
+              padding: const EdgeInsets.all(15),
+              children: [
+                TextFormFieldForAddressing(
+                  controller: addProv.fullNameController,
+                  hintText: 'Full Name',
+                  formator: [
+                    FilteringTextInputFormatter(RegExp("[a-zA-Z ]"),
+                        allow: true)
+                  ],
+                  icons: const Icon(Icons.person),
+                  keyBoardType: TextInputType.name,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Invalid name';
+                    } else if (value.length < 3) {
+                      return 'Minimum 3 letters';
+                    }
+                    return null;
+                  },
                 ),
-              );
-            },
-            icon: const Icon(
-              Icons.location_on,
+                ksizedBoxheight10,
+                TextFormFieldForAddressing(
+                  controller: addProv.phoneController,
+                  hintText: 'Phone',
+                  formator: [
+                    FilteringTextInputFormatter(RegExp("[0-9]"), allow: true)
+                  ],
+                  icons: const Icon(Icons.call),
+                  keyBoardType: TextInputType.number,
+                  maxLength: 10,
+                  validator: (value) {
+                    if (value!.isEmpty || value.length != 10) {
+                      return 'Invalid Phonenumber';
+                    }
+                    return null;
+                  },
+                ),
+                ksizedBoxheight10,
+                TextFormFieldForAddressing(
+                  controller: addProv.addressController,
+                  hintText: 'Address',
+                  maxLines: 4,
+                  icons: const Icon(Icons.location_on),
+                  keyBoardType: TextInputType.streetAddress,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Invalid Address';
+                    }
+                    return null;
+                  },
+                ),
+                ksizedBoxheight10,
+                TextFormFieldForAddressing(
+                  controller: addProv.placeController,
+                  hintText: 'Place',
+                  keyBoardType: TextInputType.streetAddress,
+                  formator: [
+                    FilteringTextInputFormatter(RegExp("[a-zA-Z ]"),
+                        allow: true)
+                  ],
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Invalid Place';
+                    }
+                    return null;
+                  },
+                ),
+                ksizedBoxheight10,
+                TextFormFieldForAddressing(
+                  controller: addProv.stateController,
+                  hintText: 'State',
+                  keyBoardType: TextInputType.streetAddress,
+                  formator: [
+                    FilteringTextInputFormatter(RegExp("[a-zA-Z ]"),
+                        allow: true)
+                  ],
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Invalid State';
+                    }
+                    return null;
+                  },
+                ),
+                ksizedBoxheight10,
+                TextFormFieldForAddressing(
+                  controller: addProv.pinController,
+                  maxLength: 6,
+                  hintText: 'PIN',
+                  keyBoardType: TextInputType.number,
+                  formator: [
+                    FilteringTextInputFormatter(RegExp("[0-9]"), allow: true)
+                  ],
+                  validator: (value) {
+                    if (value!.isEmpty || value.length != 6) {
+                      return 'Invalid PIN';
+                    }
+                    return null;
+                  },
+                ),
+                ksizedBoxheight10,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    fixedSize:
+                        Size(MediaQuery.of(context).size.width / 2.5, 50),
+                    backgroundColor: primaryBackgroundColor,
+                    // padding: const EdgeInsets.all(15),
+                  ),
+                  onPressed: () {
+                    addProv.submitButtonForAddress(
+                        context: context, type: type,address: address);
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //   builder: (context) => ShippingAddress(),
+                    // ));
+                  },
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
             ),
-            label: const Text('Pick Your Address'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              fixedSize: Size(MediaQuery.of(context).size.width / 2.5, 50),
-              backgroundColor: primaryBackgroundColor,
-              // padding: const EdgeInsets.all(15),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ShippingAddress(),
-              ));
-            },
-            child: const Text(
-              'Save',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
+          );
+        },
       ),
     );
   }

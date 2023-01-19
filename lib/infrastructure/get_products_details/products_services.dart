@@ -35,6 +35,7 @@ class ProductServices with ChangeNotifier {
       log(productDataList.value.toString());
       Provider.of<HomeProvider>(context, listen: false).loading(false);
     } catch (e) {
+      Provider.of<HomeProvider>(context, listen: false).loading(true);
       HomeProvider().loading(false);
       log("products:::::----------$e");
     }

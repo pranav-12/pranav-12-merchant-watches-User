@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/user_model.dart';
-import 'package:merchant_watches/infrastructure/login/login_services.dart';
+import 'package:merchant_watches/infrastructure/others/login/login_services.dart';
 
 class ScreenForgotPassword extends StatelessWidget {
   ScreenForgotPassword({super.key});

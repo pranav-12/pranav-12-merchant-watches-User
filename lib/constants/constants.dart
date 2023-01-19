@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:merchant_watches/domain/models/address_model.dart';
 
 import '../domain/models/cart_model.dart';
 import '../domain/models/products_model.dart';
@@ -25,6 +26,8 @@ const ksizedBoxWidth20 = SizedBox(width: 20);
 ValueNotifier<int> totalPrice = ValueNotifier(0);
 ValueNotifier<int> totalQty = ValueNotifier(0);
 ValueNotifier<List<Product?>> productDataList = ValueNotifier([]);
+
+ValueNotifier<List<Address?>> addressDataList = ValueNotifier([]);
 
 ValueNotifier<List<ProductElement?>> cartDataList = ValueNotifier([]);
 // ValueNotifier<List<Product?>> cartProductList = ValueNotifier([]);

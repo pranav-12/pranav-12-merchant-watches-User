@@ -70,9 +70,9 @@ class ScreenCart extends StatelessWidget {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      await CartService()
-                                          .removeFromCart(cartData);
-                                      await CartService().getDataCart(context);
+                                      Provider.of<CartProvider>(context,
+                                              listen: false)
+                                          .removeFromCart(context, cartData);
                                     },
                                     icon: const Icon(
                                       CupertinoIcons.clear_circled_solid,
@@ -111,7 +111,8 @@ class ScreenCart extends StatelessWidget {
                                               (context, homeProvider, child) =>
                                                   GestureDetector(
                                             onTap: () async {
-                                              homeProvider.addOrRemoveWishListFucn(
+                                              homeProvider
+                                                  .addOrRemoveWishListFucn(
                                                 cartData.id!,
                                                 context,
                                               );
@@ -150,9 +151,7 @@ class ScreenCart extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
                                         ),
-                                        QuantityWidget(
-                                          
-                                            index: index),
+                                        QuantityWidget(index: index),
                                       ],
                                     ),
                                   ],
@@ -211,7 +210,7 @@ class ScreenCart extends StatelessWidget {
                       builder: (context, value, child) => Text(
                         // value.totalQuantity().toString(),
                         value.toString(),
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ),
                   ],

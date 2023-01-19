@@ -8,8 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../domain/models/cart_model.dart';
 import '../../domain/models/products_model.dart';
+import '../../domain/models/wishlist_model.dart';
+import '../../infrastructure/get_products_details/products_services.dart';
 
 class HomeProvider with ChangeNotifier {
   List addToCartList = [];
@@ -37,16 +41,20 @@ class HomeProvider with ChangeNotifier {
       Response? response = await CartService().addToCart(product, context, 1);
 
       await CartService().getDataCart(context);
-      log('ggg');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 1),
-            backgroundColor:
-                response!.statusCode == 201 ? Colors.green : Colors.red,
-            content:
-                //  response.statusCode == 201
-                const Text("Product Added to Cart")),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 1),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          backgroundColor:
+              response!.statusCode == 201 ? Colors.green : Colors.red,
+          content:
+              //  response.statusCode == 201
+              response.statusCode == 201
+                  ? const Text("Product Added to Cart")
+                  : const Text("not added"),
+        ),
       );
       notifyListeners();
     } catch (e) {
@@ -63,6 +71,8 @@ class HomeProvider with ChangeNotifier {
       log('ggg');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 1),
             backgroundColor:

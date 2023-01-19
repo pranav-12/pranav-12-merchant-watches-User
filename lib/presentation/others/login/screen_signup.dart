@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/infrastructure/login/login_services.dart';
+import 'package:merchant_watches/infrastructure/others/login/login_services.dart';
 import 'package:merchant_watches/presentation/others/login/screen_otp.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
 import 'package:provider/provider.dart';

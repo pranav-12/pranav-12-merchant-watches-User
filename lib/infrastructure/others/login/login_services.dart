@@ -11,8 +11,8 @@ import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/otp_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../domain/models/user_model.dart';
-import '../../presentation/widgets/bottom_navigation_bar.dart';
+import '../../../domain/models/user_model.dart';
+import '../../../presentation/widgets/bottom_navigation_bar.dart';
 
 class LoginServices {
   final dio = Dio();

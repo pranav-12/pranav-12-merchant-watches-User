@@ -21,3 +21,5 @@ String userUrl = '/users';
 String cartUrl = '/cart';
 
 String wishUrl = '/wishlist';
+
+String addressUrl = '/address';

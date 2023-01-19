@@ -12,8 +12,9 @@ import 'package:merchant_watches/presentation/widgets/loading_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../domain/models/cart_model.dart';
 import '../../domain/models/products_model.dart';
-import '../../infrastructure/wishlist/wishlist_servises.dart';
+import '../../domain/models/wishlist_model.dart';
 
 class ScreenHome extends StatelessWidget {
   ScreenHome({
@@ -23,18 +24,19 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await WishListServices().getWishListData(context);
-      await ProductServices().getProducts(context);
+    log('1');
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      log('2');
+      await ProductServices().getProducts(context);
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       final id = sharedPreferences.getString('UserId');
-
       Provider.of<HomeProvider>(context, listen: false).addUserId(id!);
+
       log(id.toString());
     });
-
+    log('3');
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -135,24 +137,32 @@ class ScreenHome extends StatelessWidget {
                                                         FontWeight.bold),
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                homeProvider
-                                                    .addOrRemoveWishListFucn(
-                                                  product.id!,
-                                                  context,
-                                                );
-                                              },
-                                              child: searchIDForWishList(
-                                                          product, true) ==
-                                                      true
-                                                  ? const Icon(
-                                                      Icons.favorite,
-                                                      color: Colors.red,
-                                                    )
-                                                  : const Icon(
-                                                      Icons.favorite_border,
-                                                    ),
+                                            ValueListenableBuilder(
+                                              valueListenable: wishDataList,
+                                              builder:
+                                                  (context, wishdata, child) =>
+                                                      GestureDetector(
+                                                onTap: () async {
+                                                  homeProvider
+                                                      .addOrRemoveWishListFucn(
+                                                    product.id!,
+                                                    context,
+                                                  );
+                                                },
+                                                child: searchIDForWishList(
+                                                            product: product,
+                                                            wish: true,
+                                                            wisList:
+                                                                wishdata) ==
+                                                        true
+                                                    ? const Icon(
+                                                        Icons.favorite,
+                                                        color: Colors.red,
+                                                      )
+                                                    : const Icon(
+                                                        Icons.favorite_border,
+                                                      ),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -166,37 +176,51 @@ class ScreenHome extends StatelessWidget {
                                               style:
                                                   const TextStyle(fontSize: 20),
                                             ),
-                                            Container(padding: EdgeInsets.all(5),
+                                            Container(
+                                              padding: const EdgeInsets.all(5),
                                               decoration: BoxDecoration(
                                                   border: Border.all(),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
-                                              child: searchIDForWishList(
-                                                          product, false) ==
-                                                      false
-                                                  ? GestureDetector(
-                                                      onTap: () {
-                                                        homeProvider.addToCart(
-                                                            product, context);
-                                                      },
-                                                      child: Row(
-                                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          const Text('Add to'),
-                                                          SizedBox(
-                                                            height: 30,
-                                                            child: Image.asset(
-                                                                "assets/cart/bag_for_wishlist.png"),
+                                              child: ValueListenableBuilder(
+                                                valueListenable: cartDataList,
+                                                builder:
+                                                    (context, cartData, child) {
+                                                  return searchIDForWishList(
+                                                              product: product,
+                                                              wish: false,
+                                                              cartElement:
+                                                                  cartData) ==
+                                                          false
+                                                      ? GestureDetector(
+                                                          onTap: () async {
+                                                            homeProvider
+                                                                .addToCart(
+                                                                    product,
+                                                                    context);
+                                                          },
+                                                          child: Row(
+                                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              const Text(
+                                                                  'Add to'),
+                                                              SizedBox(
+                                                                height: 30,
+                                                                child: Image.asset(
+                                                                    "assets/cart/bag_for_wishlist.png"),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : SizedBox(
-                                                      width: size.width * 0.07,
-                                                      child: Image.asset(
-                                                          "assets/cart/added.png"),
-                                                    ),
+                                                        )
+                                                      : SizedBox(
+                                                          width:
+                                                              size.width * 0.07,
+                                                          child: Image.asset(
+                                                              "assets/cart/added.png"),
+                                                        );
+                                                },
+                                              ),
                                             )
                                           ],
                                         ),
@@ -218,23 +242,27 @@ class ScreenHome extends StatelessWidget {
     );
   }
 
-  bool searchIDForWishList(Product product, bool wish) {
+  bool searchIDForWishList(
+      {required Product product,
+      required bool wish,
+      List<ProductElementForWishList?>? wisList,
+      List<ProductElement?>? cartElement}) {
     bool findProductId = false;
     if (wish == true) {
-      for (var i = 0; i < wishDataList.value.length; i++) {
-        if (wishDataList.value[i]!.product!.id == product.id) {
+      for (var i = 0; i < wisList!.length; i++) {
+        if (wisList[i]!.product!.id == product.id) {
           return findProductId = true;
         }
       }
     } else {
       log('entry');
-      for (var i = 0; i < cartDataList.value.length; i++) {
+      for (var i = 0; i < cartElement!.length; i++) {
         log('---------------message');
-        if (cartDataList.value[i]!.product!.id == product.id) {
+        if (cartElement[i]!.product!.id == product.id) {
           return findProductId = true;
         }
       }
-      log(findProductId.toString());
+      log("FIND__________________________ID" + findProductId.toString());
     }
 
     return findProductId;

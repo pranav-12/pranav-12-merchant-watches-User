@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:merchant_watches/appication/bottom_nav_bar_provider.dart';
 import 'package:merchant_watches/appication/cart/cart_provider.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
+import 'package:merchant_watches/appication/other/address/address_provider.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/appication/wishlist/wishlist_provider.dart';
@@ -37,7 +38,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => WishListProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AddressProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

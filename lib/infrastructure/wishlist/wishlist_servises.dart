@@ -47,7 +47,7 @@ class WishListServices with ChangeNotifier {
       wishDataList.value
           .addAll(WishListModel.fromJson(data).products!.reversed);
       wishDataList.notifyListeners();
-      log(wishDataList.value.toString());
+      log("wishList__________________"+wishDataList.value.toString());
       // for (var i = 0; i < data!.products!.length; i++) {
       //   if (data!.products![i]!.product!.category == "Smart Watches") {
       //     log(data!.products![i].toString());
