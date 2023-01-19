@@ -96,12 +96,14 @@ class ScreenWishList extends StatelessWidget {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
-                                            width: size.width * 0.49,
+                                            width: size.width * 0.4,
                                             child: Text(
                                               product.name!,
+                                              maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   fontSize: 20,
@@ -111,15 +113,15 @@ class ScreenWishList extends StatelessWidget {
                                           Consumer<HomeProvider>(
                                             builder: (context, value, child) =>
                                                 GestureDetector(
-                                              onTap: () {
-                                                value.addOrRemoveWishListFucn(
-                                                    product.id!, context);
-                                              },
-                                              child: const Icon(
-                                                Icons.favorite,
-                                                color: Colors.red,
-                                              ),
-                                            ),
+                                                  onTap: () {
+                                                    value.addOrRemoveWishListFucn(
+                                                        product.id!, context);
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
                                           ),
                                         ],
                                       ),

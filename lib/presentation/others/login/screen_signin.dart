@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/user_model.dart';
@@ -72,10 +73,21 @@ class ScreenSignIn extends StatelessWidget {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
-                          onPressed: () {
-                           value.visible==true? value.visibleONOrOf(false): value.visibleONOrOf(true);
-                          },
-                          icon: Icon(Icons.remove_red_eye)),
+                        onPressed: () {
+                          value.visible == true
+                              ? value.visibleONOrOf(false)
+                              : value.visibleONOrOf(true);
+                        },
+                        icon: value.visible == true
+                            ? Icon(
+                                CupertinoIcons.eye_slash_fill,
+                                color: Colors.black,
+                              )
+                            : Icon(
+                                CupertinoIcons.eye,
+                                color: Colors.black,
+                              ),
+                      ),
                       hintText: 'password ',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),

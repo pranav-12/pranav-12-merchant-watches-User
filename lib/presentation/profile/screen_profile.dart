@@ -5,8 +5,10 @@ class ScreenProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(child: Text('Profile')),
+    return Scaffold(
+      body: SafeArea(
+        child: GridView.count(crossAxisCount: 1,),
+      ),
     );
   }
 }

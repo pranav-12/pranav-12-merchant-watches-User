@@ -6,7 +6,7 @@ import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
 import 'package:merchant_watches/presentation/cart/quantity_widget.dart';
-import 'package:merchant_watches/presentation/others/checkout.dart';
+import 'package:merchant_watches/presentation/others/checkout/checkout.dart';
 import 'package:provider/provider.dart';
 
 class ScreenShowProductDetails extends StatelessWidget {
@@ -165,7 +165,7 @@ class ScreenShowProductDetails extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const CheckoutScreen(),
+                  builder: (context) => CheckoutScreen(product: product),
                 ));
               },
               child: const Text(

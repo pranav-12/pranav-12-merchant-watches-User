@@ -19,7 +19,7 @@ class ShippingAddress extends StatelessWidget {
   final ActionType type;
   final Address? address;
 
-  const ShippingAddress({super.key, required this.type, this.id,this.address});
+  const ShippingAddress({super.key, required this.type, this.id, this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +42,15 @@ class ShippingAddress extends StatelessWidget {
       addressProvider.stateController.text = address.state ?? "No state";
       addressProvider.placeController.text = address.place ?? "No place";
       addressProvider.pinController.text = address.pin ?? "No pin";
+    } else {
+      final addressProvider =
+          Provider.of<AddressProvider>(context, listen: false);
+      addressProvider.fullNameController.clear();
+      addressProvider.addressController.clear();
+      addressProvider.phoneController.clear();
+      addressProvider.stateController.clear();
+      addressProvider.placeController.clear();
+      addressProvider.pinController.clear();
     }
     // log(index.toString());
     return Scaffold(
@@ -85,26 +94,10 @@ class ShippingAddress extends StatelessWidget {
                 ),
                 ksizedBoxheight10,
                 TextFormFieldForAddressing(
-                  controller: addProv.phoneController,
-                  hintText: 'Phone',
-                  formator: [
-                    FilteringTextInputFormatter(RegExp("[0-9]"), allow: true)
-                  ],
-                  icons: const Icon(Icons.call),
-                  keyBoardType: TextInputType.number,
-                  maxLength: 10,
-                  validator: (value) {
-                    if (value!.isEmpty || value.length != 10) {
-                      return 'Invalid Phonenumber';
-                    }
-                    return null;
-                  },
-                ),
-                ksizedBoxheight10,
-                TextFormFieldForAddressing(
                   controller: addProv.addressController,
+                  maxLength: 90,
                   hintText: 'Address',
-                  maxLines: 4,
+                  maxLines: 2,
                   icons: const Icon(Icons.location_on),
                   keyBoardType: TextInputType.streetAddress,
                   validator: (value) {
@@ -163,6 +156,23 @@ class ShippingAddress extends StatelessWidget {
                   },
                 ),
                 ksizedBoxheight10,
+                TextFormFieldForAddressing(
+                  controller: addProv.phoneController,
+                  hintText: 'Phone',
+                  formator: [
+                    FilteringTextInputFormatter(RegExp("[0-9]"), allow: true)
+                  ],
+                  icons: const Icon(Icons.call),
+                  keyBoardType: TextInputType.number,
+                  maxLength: 10,
+                  validator: (value) {
+                    if (value!.isEmpty || value.length != 10) {
+                      return 'Invalid Phonenumber';
+                    }
+                    return null;
+                  },
+                ),
+                ksizedBoxheight10,
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -174,7 +184,7 @@ class ShippingAddress extends StatelessWidget {
                   ),
                   onPressed: () {
                     addProv.submitButtonForAddress(
-                        context: context, type: type,address: address);
+                        context: context, type: type, address: address);
                     // Navigator.of(context).push(MaterialPageRoute(
                     //   builder: (context) => ShippingAddress(),
                     // ));

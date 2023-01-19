@@ -16,6 +16,27 @@ class AddressProvider with ChangeNotifier {
   final placeController = TextEditingController();
   final pinController = TextEditingController();
 
+  Address? address;
+
+  bool showSaveButton = true;
+
+  void showSaveButtonFunc(bool val) {
+    showSaveButton = val;
+    notifyListeners();
+  }
+
+  void valueForRadioButton(Address add) {
+    address = add;
+    notifyListeners();
+  }
+
+  bool isSelected() {
+    bool addressSelectionBool = false;
+    addressSelectionBool = !addressSelectionBool;
+
+    return addressSelectionBool;
+  }
+
   void submitButtonForAddress(
       {required BuildContext context,
       required ActionType type,
@@ -146,7 +167,7 @@ class AddressProvider with ChangeNotifier {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
         content: const Text('Do you want to delete'),
       ),
     );
