@@ -23,8 +23,8 @@ class WishListServices with ChangeNotifier {
   Future<Response?> addOrRemoveWishList(String productId) async {
     log(productId.toString());
     try {
-      Response response = await dio.post('$baseUrl$wishUrl/',
-          data: {"userId": userId, "product": productId});
+      Response response = await dio
+          .post('$wishUrl/', data: {"userId": userId, "product": productId});
 
       log(response.toString());
       return response;
@@ -40,14 +40,14 @@ class WishListServices with ChangeNotifier {
   Future<void> getWishListData(BuildContext context) async {
     log('$baseUrl$wishUrl/?userId=$userId');
     try {
-      Response response = await dio.get('$baseUrl$wishUrl/?userId=$userId');
+      Response response = await dio.get('$wishUrl/?userId=$userId');
       Map<String, dynamic> data = await json.decode(response.data);
       // data = WishListModel.fromJson(map);
       wishDataList.value.clear();
       wishDataList.value
           .addAll(WishListModel.fromJson(data).products!.reversed);
       wishDataList.notifyListeners();
-      log("wishList__________________"+wishDataList.value.toString());
+      log("wishList__________________" + wishDataList.value.toString());
       // for (var i = 0; i < data!.products!.length; i++) {
       //   if (data!.products![i]!.product!.category == "Smart Watches") {
       //     log(data!.products![i].toString());

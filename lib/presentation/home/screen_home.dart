@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
+import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/get_products_details/products_services.dart';
+import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
 import 'package:merchant_watches/presentation/home/screen_show_product.dart';
 import 'package:merchant_watches/presentation/home/widgets/carousel.dart';
 import 'package:merchant_watches/presentation/home/widgets/drawer.dart';
@@ -24,19 +26,18 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('1');
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      log('2');
       await ProductServices().getProducts(context);
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       final id = sharedPreferences.getString('UserId');
       Provider.of<HomeProvider>(context, listen: false).addUserId(id!);
+      await WishListServices().getWishListData(context);
+      await CartService().getDataCart(context);
 
       log(id.toString());
     });
-    log('3');
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

@@ -3,17 +3,12 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../domain/models/cart_model.dart';
 import '../../domain/models/products_model.dart';
-import '../../domain/models/wishlist_model.dart';
-import '../../infrastructure/get_products_details/products_services.dart';
 
 class HomeProvider with ChangeNotifier {
   List addToCartList = [];
@@ -25,9 +20,6 @@ class HomeProvider with ChangeNotifier {
 
   void loading(bool val) {
     loadingBool = val;
-
-    log("val---------------" + val.toString());
-    log("loading----------------" + loadingBool.toString());
     notifyListeners();
   }
 

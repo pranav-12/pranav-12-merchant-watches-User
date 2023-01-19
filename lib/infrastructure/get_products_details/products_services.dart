@@ -20,11 +20,9 @@ class ProductServices with ChangeNotifier {
   }
 
   Future getProducts(BuildContext context) async {
-    log(baseUrl + productUrl);
     try {
       Provider.of<HomeProvider>(context, listen: false).loading(true);
-      // HomeProvider().loading(true);
-      Response response = await dio.get(baseUrl + productUrl);
+      Response response = await dio.get(productUrl);
 
       Map<String, dynamic> product = json.decode(response.data);
 

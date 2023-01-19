@@ -35,7 +35,7 @@ class LoginServices {
     try {
       value.isLoadingFunc(true);
       Response response =
-          await dio.post(baseUrl + authUrl + signUpUrl, data: signUp.toJson());
+          await dio.post( authUrl + signUpUrl, data: signUp.toJson());
       if (response.statusCode == 201) {
         value.isLoadingFunc(false);
       } else {}
@@ -54,7 +54,7 @@ class LoginServices {
       log("${baseUrl + authUrl + sendOTPUrl}?email=$email");
       // http://localhost:5000/auth/otp?email=pranav17472@gmail.com
       Response response =
-          await dio.get("${baseUrl + authUrl + sendOTPUrl}?email=$email");
+          await dio.get("${ authUrl + sendOTPUrl}?email=$email");
       log(response.statusCode.toString());
     } on DioError catch (e) {
       log("dioERROR--------------------${e.message}");
@@ -68,7 +68,7 @@ class LoginServices {
   Future<void> verifyOTP(OTPModel otp, BuildContext context) async {
     try {
       Response response =
-          await dio.post(baseUrl + authUrl + sendOTPUrl, data: otp.toJson());
+          await dio.post( authUrl + sendOTPUrl, data: otp.toJson());
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
@@ -104,7 +104,7 @@ class LoginServices {
   ) async {
     log(baseUrl + authUrl + forgotPasswordUrl);
     try {
-      Response response = await dio.post(baseUrl + authUrl + forgotPasswordUrl,
+      Response response = await dio.post( authUrl + forgotPasswordUrl,
           data: {"email": value.email.toString(), "password": value.password});
       log(response.statusCode.toString());
 
@@ -143,7 +143,7 @@ class LoginServices {
   Future<void> signIn(FieldsForUserModel value, BuildContext context) async {
     // log(value.fullname.toString());
     try {
-      Response response = await dio.post(baseUrl + authUrl + signInUrl, data: {
+      Response response = await dio.post(authUrl + signInUrl, data: {
         "email": value.email.toString(),
         "password": value.password.toString()
       });
@@ -190,10 +190,9 @@ class LoginServices {
 
   Future<Response?> checkUser(String userEmail) async {
     // http://127.0.0.1:5000/users/?email=pranavn17472@gmail.com
-    log("$baseUrl/users/?email=$userEmail");
     log(userEmail);
     try {
-      Response response = await dio.get("$baseUrl/users/?email=$userEmail");
+      Response response = await dio.get("/users/?email=$userEmail");
       // log(response.data.toString());
       // userId.clear();
       // log(userId.toString());
@@ -214,6 +213,5 @@ class LoginServices {
       log('error on checkUser :====$e');
       return null;
     }
-    return null;
-  }
+      }
 }

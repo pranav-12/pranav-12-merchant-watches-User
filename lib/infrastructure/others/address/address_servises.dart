@@ -19,7 +19,7 @@ class AddressServices {
   Future<Response?> addAddress(Address addressModel) async {
     try {
       Response response =
-          await dio.post("$baseUrl$addressUrl/", data: addressModel.toJson());
+          await dio.post("$addressUrl/", data: addressModel.toJson());
 
       log(response.toString());
       return response;
@@ -35,7 +35,7 @@ class AddressServices {
   Future<Response?> getAllAddress() async {
     try {
       Response response = await dio.get(
-        "$baseUrl$addressUrl/?userId=$userId",
+        "$addressUrl/?userId=$userId",
       );
 
       Map<String, dynamic> data = jsonDecode(response.data);
@@ -59,7 +59,7 @@ class AddressServices {
   Future<Response?> upDateAddress(Address address) async {
     try {
       Response response =
-          await dio.patch("$baseUrl$addressUrl/", data: address.toJson());
+          await dio.patch("$addressUrl/", data: address.toJson());
       log("updateAddress$response");
       return response;
     } on DioError catch (err) {
@@ -73,7 +73,7 @@ class AddressServices {
 
   Future<Response?> deleteAddress(Address address) async {
     try {
-      Response response = await dio.delete("$baseUrl$addressUrl/${address.id}");
+      Response response = await dio.delete("$addressUrl/${address.id}");
       log(response.toString());
       return response;
     } on DioError catch (err) {
