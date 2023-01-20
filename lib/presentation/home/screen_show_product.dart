@@ -3,10 +3,8 @@ import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
-import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
-import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
-import 'package:merchant_watches/presentation/cart/quantity_widget.dart';
-import 'package:merchant_watches/presentation/others/checkout/checkout.dart';
+import 'package:merchant_watches/presentation/cart/screen_cart.dart';
+import 'package:merchant_watches/presentation/others/checkout/screen_address.dart';
 import 'package:provider/provider.dart';
 
 class ScreenShowProductDetails extends StatelessWidget {
@@ -135,9 +133,9 @@ class ScreenShowProductDetails extends StatelessWidget {
                                 Icons.done_outline_rounded,
                                 color: Colors.white,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         searchIDForWishList(product, false) == false
-                            ? Text(
+                            ? const Text(
                                 "Add to Cart",
                                 style: TextStyle(
                                     fontSize: 16,
@@ -155,7 +153,8 @@ class ScreenShowProductDetails extends StatelessWidget {
                     )),
               ),
             ),
-            ElevatedButton(
+            ElevatedButton.icon(
+              icon: Icon(Icons.shopping_cart),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -165,11 +164,11 @@ class ScreenShowProductDetails extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => CheckoutScreen(product: product),
+                  builder: (context) =>ScreenCart(),
                 ));
               },
-              child: const Text(
-                'Buy',
+              label: const Text(
+                'Go to Cart',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             )

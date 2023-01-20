@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
@@ -29,7 +28,7 @@ class CartProvider with ChangeNotifier {
           },
         ),
         content: Text(
-          "Do you want to Delete",
+          "Do you want to Remove From Cart",
           style: TextStyle(color: Colors.black),
         ),
       ),

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/address/address_provider.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
-import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:merchant_watches/presentation/others/address/shipping_address.dart';
 import 'package:merchant_watches/presentation/others/checkout/cashondelivery.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +11,10 @@ import 'package:provider/provider.dart';
 import '../../../constants/constants.dart';
 import '../../widgets/custom_button.dart';
 
-class CheckoutScreen extends StatelessWidget {
-  final Product product;
-  const CheckoutScreen({super.key, required this.product});
+class ScreenAddress extends StatelessWidget {
+  const ScreenAddress({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +27,14 @@ class CheckoutScreen extends StatelessWidget {
     log("address checking---------------------%%%%%${Provider.of<AddressProvider>(context, listen: false).address}");
     return Scaffold(
       appBar: AppBar(
-       
         backgroundColor: primaryBackgroundColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text('Checkout'),
+            const Text('Address'),
             SizedBox(
               height: 30,
-              child: Image.asset("assets/cart/shopping.png"),
+              child: Image.asset("assets/pin.png"),
             )
           ],
         ),
@@ -168,25 +167,13 @@ class CheckoutScreen extends StatelessWidget {
                 itemCount: addressList.length),
           ),
           ksizedBoxheight20,
-          Consumer<AddressProvider>(
-            builder: (context, value, child) {
-              log(value.showSaveButton.toString());
-              return Visibility(
-                visible: value.showSaveButton,
-                child: const Text(
-                  'Payment Method',
-                  style: TextStyle(fontSize: 16),
-                ),
-              );
-            },
-          ),
           ksizedBoxheight10,
           Consumer<AddressProvider>(
             builder: (context, addressProvider, child) => Visibility(
               visible: addressProvider.showSaveButton,
               replacement: CustomElevatedButton(
                   function: () {
-                    cashOnDelivery(
+                    proceedButton(
                         addressProvider, context, addressProvider.address);
                   },
                   title: "Save"),
@@ -199,21 +186,11 @@ class CheckoutScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Consumer<AddressProvider>(
-                  builder: (context, addresPro, child) => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomElevatedButton(
-                        function: () {
-                          cashOnDelivery(addresPro, context, addresPro.address);
-                        },
-                        title: "Cash On Delivery",
-                      ),
-                      ksizedBoxheight10,
-                      CustomElevatedButton(
-                        function: () {},
-                        title: "Debit/Credit Cards",
-                      )
-                    ],
+                  builder: (context, addresPro, child) => CustomElevatedButton(
+                    function: () {
+                      proceedButton(addresPro, context, addresPro.address);
+                    },
+                    title: "Proceed",
                   ),
                 ),
               ),
@@ -225,7 +202,7 @@ class CheckoutScreen extends StatelessWidget {
     );
   }
 
-  void cashOnDelivery(
+  void proceedButton(
       AddressProvider addressProvider, BuildContext context, Address? address) {
     log(address.toString());
     if (address == null) {
@@ -242,9 +219,8 @@ class CheckoutScreen extends StatelessWidget {
     }
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ScreenCashOnDelivery(
+        builder: (context) => ScreenCheckOut(
           address: address,
-          product: product,
         ),
       ),
     );
