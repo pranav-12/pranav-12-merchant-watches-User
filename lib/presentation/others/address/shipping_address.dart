@@ -77,6 +77,7 @@ class ShippingAddress extends StatelessWidget {
                 TextFormFieldForAddressing(
                   controller: addProv.fullNameController,
                   hintText: 'Full Name',
+                  maxLength: 20,
                   formator: [
                     FilteringTextInputFormatter(RegExp("[a-zA-Z ]"),
                         allow: true)
@@ -92,7 +93,6 @@ class ShippingAddress extends StatelessWidget {
                     return null;
                   },
                 ),
-                ksizedBoxheight10,
                 TextFormFieldForAddressing(
                   controller: addProv.addressController,
                   maxLength: 90,
@@ -107,10 +107,10 @@ class ShippingAddress extends StatelessWidget {
                     return null;
                   },
                 ),
-                ksizedBoxheight10,
                 TextFormFieldForAddressing(
                   controller: addProv.placeController,
                   hintText: 'Place',
+                  maxLength: 20,
                   keyBoardType: TextInputType.streetAddress,
                   formator: [
                     FilteringTextInputFormatter(RegExp("[a-zA-Z ]"),
@@ -123,10 +123,10 @@ class ShippingAddress extends StatelessWidget {
                     return null;
                   },
                 ),
-                ksizedBoxheight10,
                 TextFormFieldForAddressing(
                   controller: addProv.stateController,
                   hintText: 'State',
+                  maxLength: 20,
                   keyBoardType: TextInputType.streetAddress,
                   formator: [
                     FilteringTextInputFormatter(RegExp("[a-zA-Z ]"),
@@ -139,7 +139,6 @@ class ShippingAddress extends StatelessWidget {
                     return null;
                   },
                 ),
-                ksizedBoxheight10,
                 TextFormFieldForAddressing(
                   controller: addProv.pinController,
                   maxLength: 6,
@@ -155,7 +154,6 @@ class ShippingAddress extends StatelessWidget {
                     return null;
                   },
                 ),
-                ksizedBoxheight10,
                 TextFormFieldForAddressing(
                   controller: addProv.phoneController,
                   hintText: 'Phone',
@@ -172,11 +170,11 @@ class ShippingAddress extends StatelessWidget {
                     return null;
                   },
                 ),
-                ksizedBoxheight10,
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     fixedSize:
                         Size(MediaQuery.of(context).size.width / 2.5, 50),
                     backgroundColor: primaryBackgroundColor,

@@ -61,17 +61,17 @@ class AddressProvider with ChangeNotifier {
       notifyListeners();
     } else {
       if (formKeyForAddress.currentState!.validate()) {
-        final addAddress = Address(
-          // id: DateTime.now().microsecondsSinceEpoch.toString(),
-          userId: userId,
-          fullName: fullNameController.text,
-          phone: phoneController.text,
-          address: addressController.text,
-          place: placeController.text,
-          state: stateController.text,
-          pin: pinController.text,
-        );
         if (type == ActionType.addAddress) {
+          final addAddress = Address(
+            // id: DateTime.now().microsecondsSinceEpoch.toString(),
+            userId: userId,
+            fullName: fullNameController.text,
+            phone: phoneController.text,
+            address: addressController.text,
+            place: placeController.text,
+            state: stateController.text,
+            pin: pinController.text,
+          );
           Response? response = await AddressServices().addAddress(addAddress);
           await AddressServices().getAllAddress();
           ScaffoldMessenger.of(context).showSnackBar(
@@ -104,9 +104,10 @@ class AddressProvider with ChangeNotifier {
                 pin: pinController.text,
                 place: placeController.text,
                 state: stateController.text,
-                userId: addAddress.userId);
+                userId: address.userId);
             Response? response =
                 await AddressServices().upDateAddress(updateAddress);
+            await AddressServices().getAllAddress();
 
             if (response!.statusCode == 202) {
               fullNameController.clear();

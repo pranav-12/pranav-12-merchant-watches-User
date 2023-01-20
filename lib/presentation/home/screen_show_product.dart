@@ -4,7 +4,7 @@ import 'package:merchant_watches/appication/product_details_provider/product_pro
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:merchant_watches/presentation/cart/screen_cart.dart';
-import 'package:merchant_watches/presentation/others/checkout/screen_address.dart';
+import 'package:merchant_watches/presentation/others/address/screen_address.dart';
 import 'package:provider/provider.dart';
 
 class ScreenShowProductDetails extends StatelessWidget {

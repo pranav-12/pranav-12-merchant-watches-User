@@ -27,7 +27,7 @@ class CartProvider with ChangeNotifier {
             await CartService().getDataCart(context);
           },
         ),
-        content: Text(
+        content: const Text(
           "Do you want to Remove From Cart",
           style: TextStyle(color: Colors.black),
         ),

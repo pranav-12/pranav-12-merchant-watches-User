@@ -6,7 +6,7 @@ import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/cart_model.dart';
 import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/presentation/cart/quantity_widget.dart';
-import 'package:merchant_watches/presentation/others/checkout/screen_address.dart';
+import 'package:merchant_watches/presentation/others/address/screen_address.dart';
 import 'package:merchant_watches/presentation/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -112,13 +112,24 @@ class ScreenCart extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: CustomElevatedButton(
               function: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ScreenAddress(),
-                  ),
-                );
+                if (cartDataList.value.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text('Your Cart is Empty'),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.redAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ));
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ScreenAddress(),
+                    ),
+                  );
+                }
               },
-              title: 'Order Now'),
+              title: 'Order Now',
+              color: Colors.indigo),
         )
       ]),
     );

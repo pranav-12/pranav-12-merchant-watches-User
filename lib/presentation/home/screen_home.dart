@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -9,7 +11,6 @@ import 'package:merchant_watches/infrastructure/get_products_details/products_se
 import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
 import 'package:merchant_watches/presentation/home/screen_show_product.dart';
 import 'package:merchant_watches/presentation/home/widgets/carousel.dart';
-import 'package:merchant_watches/presentation/home/widgets/drawer.dart';
 import 'package:merchant_watches/presentation/widgets/loading_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +53,6 @@ class ScreenHome extends StatelessWidget {
           style: GoogleFonts.ultra(color: primaryFontColor, fontSize: 30),
         ),
       ),
-      endDrawer: DrawerDesign(size: size),
       body: Consumer<HomeProvider>(
         builder: (context, homeProvider, child) => homeProvider.loadingBool ==
                 false

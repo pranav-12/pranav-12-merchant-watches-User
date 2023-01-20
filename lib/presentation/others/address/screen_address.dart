@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/address/address_provider.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 import 'package:merchant_watches/presentation/others/address/shipping_address.dart';
-import 'package:merchant_watches/presentation/others/checkout/cashondelivery.dart';
+import 'package:merchant_watches/presentation/others/checkout/checkout.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/constants.dart';
@@ -176,7 +176,8 @@ class ScreenAddress extends StatelessWidget {
                     proceedButton(
                         addressProvider, context, addressProvider.address);
                   },
-                  title: "Save"),
+                  title: "Save",
+                  color: Colors.indigo),
               child: Container(
                 padding: const EdgeInsets.all(20),
                 height: MediaQuery.of(context).size.height / 5,
@@ -190,6 +191,7 @@ class ScreenAddress extends StatelessWidget {
                     function: () {
                       proceedButton(addresPro, context, addresPro.address);
                     },
+                    color: Colors.indigo,
                     title: "Proceed",
                   ),
                 ),

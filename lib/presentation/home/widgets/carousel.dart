@@ -15,47 +15,30 @@ class CarouselForImage extends StatelessWidget {
       builder: (context, value, child) => CarouselSlider(
         items: List.generate(value.length, (index) {
           return Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            width: MediaQuery.of(context).size.width - 10,
+            padding: const EdgeInsets.all(20),
+            width: MediaQuery.of(context).size.width * 1,
             decoration: BoxDecoration(
-              border: Border.all(),
+              color: primaryBackgroundColor,
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 alignment: Alignment.bottomCenter,
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
                 image: NetworkImage(value[index]!.image![0]!),
               ),
             ),
           );
         }),
-
-        // [
-        //   for (int i = 0; i < value.length; i++)
-        //   List.generate(value.length, (index) => null)
-        //     Container(
-        //       padding: const EdgeInsets.all(10),
-        //       margin: const EdgeInsets.symmetric(horizontal: 5),
-        //       width: MediaQuery.of(context).size.width - 10,
-        //       decoration: BoxDecoration(
-        //         border: Border.all(),
-        //         borderRadius: BorderRadius.circular(10),
-        //         image: DecorationImage(
-        //           alignment: Alignment.bottomCenter,
-        //           fit: BoxFit.fill,
-        //           image: NetworkImage(value[0].products![i]!.image![0]!),
-        //         ),
-        //       ),
-        //     ),
-        // ],
         options: CarouselOptions(
-            enableInfiniteScroll: true,
-            height: 200,
-            autoPlay: true,
-            // reverse: true,
-            animateToClosest: true,
-            enlargeCenterPage: true,
-            enlargeFactor: 0.2),
+          enableInfiniteScroll: true,
+          height: 200,
+          autoPlay: true,
+          // reverse: true,
+          animateToClosest: true,
+          enlargeCenterPage: true,
+          viewportFraction: 0.9,
+          
+          enlargeFactor: 0.2,
+        ),
       ),
     );
   }
