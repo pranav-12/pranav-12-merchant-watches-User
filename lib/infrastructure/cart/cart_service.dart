@@ -53,7 +53,6 @@ class CartService with ChangeNotifier {
 
 // int totalAmount = 0;
   Future<Response?> getDataCart(BuildContext context) async {
-    totalPrice.value = 0;
     log('$cartUrl/?userid=$userId');
     try {
       Response response = await dio.get(
@@ -61,6 +60,7 @@ class CartService with ChangeNotifier {
       );
       // log("response===" + response.data);
       // final data = CartModel.fromJson(jsonDecode(response.data));
+      
       Map<String, dynamic> data = json.decode(response.data);
 
       final val = CartProductModel.fromJson(data);

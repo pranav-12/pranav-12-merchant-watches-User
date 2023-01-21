@@ -180,8 +180,8 @@ class ScreenAddress extends StatelessWidget {
                   color: Colors.indigo),
               child: Container(
                 padding: const EdgeInsets.all(20),
-                height: MediaQuery.of(context).size.height / 5,
-                width: MediaQuery.of(context).size.width / 3,
+                height: MediaQuery.of(context).size.width * 0.25,
+                // width: MediaQuery.of(context).size.width / 3,
                 decoration: BoxDecoration(
                   border: Border.all(),
                   borderRadius: BorderRadius.circular(10),

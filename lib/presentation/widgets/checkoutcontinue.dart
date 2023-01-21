@@ -6,10 +6,12 @@ import '../../constants/constants.dart';
 import '../others/payment/screen_payment.dart';
 
 class CheckOutContinueSection extends StatelessWidget {
+  final String buttonTitle;
   final void Function()? elevatedButtonFunction;
   const CheckOutContinueSection({
     Key? key,
-    required this.size, this.elevatedButtonFunction,
+    required this.size,
+    this.elevatedButtonFunction, required this.buttonTitle,
   }) : super(key: key);
 
   final Size size;
@@ -48,7 +50,7 @@ class CheckOutContinueSection extends StatelessWidget {
                         ),
                       ),
                       onPressed: elevatedButtonFunction,
-                      child: const Text('Continue')),
+                      child:  Text(buttonTitle)),
                 )
               ],
             ),

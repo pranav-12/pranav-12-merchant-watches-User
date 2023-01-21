@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/checkout_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
+import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/presentation/others/payment/payment_provider.dart';
-import 'package:merchant_watches/presentation/others/successfull_message_screen.dart';
 import 'package:merchant_watches/presentation/widgets/checkoutcontinue.dart';
 import 'package:provider/provider.dart';
 
@@ -156,8 +156,9 @@ class ScreenPayment extends StatelessWidget {
           ),
           Consumer<PaymentProvider>(
             builder: (context, paymentProv, child) => CheckOutContinueSection(
+              buttonTitle: 'Confirm Order',
               size: size,
-              elevatedButtonFunction: () {
+              elevatedButtonFunction: () async {
                 if (paymentProv.method == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -178,7 +179,22 @@ class ScreenPayment extends StatelessWidget {
                     context,
                     address,
                   );
-                 
+                  await CartService().getDataCart(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.pinkAccent.shade400,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                          
+                      action: SnackBarAction(
+                        textColor: Colors.white,
+                        label: 'View more details',
+                        onPressed: () {},
+                      ),
+                      content: Text('Your Order Placed Successfully'),
+                    ),
+                  );
                 } else {}
               },
             ),

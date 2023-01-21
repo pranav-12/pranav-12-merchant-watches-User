@@ -207,6 +207,7 @@ class ScreenCheckOut extends StatelessWidget {
           ),
           CheckOutContinueSection(
               size: size,
+              buttonTitle: 'Continue',
               elevatedButtonFunction: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ScreenPayment(

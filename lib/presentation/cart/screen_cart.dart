@@ -1,16 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:merchant_watches/appication/cart/cart_provider.dart';
-import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/domain/models/cart_model.dart';
 import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
-import 'package:merchant_watches/presentation/cart/quantity_widget.dart';
 import 'package:merchant_watches/presentation/others/address/screen_address.dart';
 import 'package:merchant_watches/presentation/widgets/custom_button.dart';
-import 'package:provider/provider.dart';
 
-import '../../appication/product_details_provider/product_provider.dart';
 import '../../domain/models/products_model.dart';
 import '../widgets/products_builder_method.dart';
 

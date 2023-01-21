@@ -115,7 +115,7 @@ ValueListenableBuilder<List<ProductElement?>> dataForProducts() {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "₹ ${cartData.price}",
+                                    "₹ ${cart[index]!.price}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16),
