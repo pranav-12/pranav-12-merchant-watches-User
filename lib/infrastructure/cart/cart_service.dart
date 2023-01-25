@@ -42,8 +42,8 @@ class CartService with ChangeNotifier {
 
   Future<void> removeFromCart(Product product) async {
     try {
-      Response response = await dio.patch('$cartUrl/',
-          data: {"userid": userId, "product": product.id});
+      Response response = await dio
+          .patch('$cartUrl/', data: {"userid": userId, "product": product.id});
 
       log(response.data);
     } catch (e) {
@@ -52,7 +52,7 @@ class CartService with ChangeNotifier {
   }
 
 // int totalAmount = 0;
-  Future<Response?> getDataCart(BuildContext context) async {
+  Future<Object?> getDataCart(BuildContext context) async {
     log('$cartUrl/?userid=$userId');
     try {
       Response response = await dio.get(
@@ -60,7 +60,7 @@ class CartService with ChangeNotifier {
       );
       // log("response===" + response.data);
       // final data = CartModel.fromJson(jsonDecode(response.data));
-      
+
       Map<String, dynamic> data = json.decode(response.data);
 
       final val = CartProductModel.fromJson(data);
@@ -82,7 +82,9 @@ class CartService with ChangeNotifier {
       return err.response;
     } catch (e) {
       log("getCart error====$e");
+      cartDataList.value.clear();
+      cartDataList.notifyListeners();
+      return [];
     }
-    return null;
   }
 }

@@ -82,8 +82,9 @@ class ScreenHome extends StatelessWidget {
                           productsList.length,
                           (index) {
                             final product = productsList[index];
-                            log(product.toString());
-
+                            log(
+                              product.toString(),
+                            );
                             return InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -106,6 +107,8 @@ class ScreenHome extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.all(10),
@@ -122,20 +125,45 @@ class ScreenHome extends StatelessWidget {
                                         Divider(
                                             color: primaryBackgroundColor,
                                             thickness: 1),
+                                        Container(
+                                          color: Colors.white,
+                                          // width: size.width / 3.5,
+                                          child: Text(
+                                            product.name!,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        ksizedBoxheight10,
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
-                                              color: Colors.white,
-                                              width: size.width / 3.5,
-                                              child: Text(
-                                                product.name!,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                            Text.rich(
+                                              TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        "₹ ${product.price! + product.price! * 15 / 100}",
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
+                                                      // fontSize: 20,
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                        "\t ₹ ${product.price!}",
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                             ValueListenableBuilder(
@@ -158,71 +186,15 @@ class ScreenHome extends StatelessWidget {
                                                         true
                                                     ? const Icon(
                                                         Icons.favorite,
+                                                        size: 30,
                                                         color: Colors.red,
                                                       )
                                                     : const Icon(
+                                                        size: 30,
                                                         Icons.favorite_border,
                                                       ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        ksizedBoxheight10,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '₹ ${product.price}',
-                                              style:
-                                                  const TextStyle(fontSize: 20),
-                                            ),
-                                            Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: ValueListenableBuilder(
-                                                valueListenable: cartDataList,
-                                                builder:
-                                                    (context, cartData, child) {
-                                                  return searchIDForWishList(
-                                                              product: product,
-                                                              wish: false,
-                                                              cartElement:
-                                                                  cartData) ==
-                                                          false
-                                                      ? GestureDetector(
-                                                          onTap: () async {
-                                                            homeProvider
-                                                                .addToCart(
-                                                                    product,
-                                                                    context);
-                                                          },
-                                                          child: Row(
-                                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              const Text(
-                                                                  'Add to'),
-                                                              SizedBox(
-                                                                height: 30,
-                                                                child: Image.asset(
-                                                                    "assets/cart/bag_for_wishlist.png"),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        )
-                                                      : SizedBox(
-                                                          width:
-                                                              size.width * 0.07,
-                                                          child: Image.asset(
-                                                              "assets/cart/added.png"),
-                                                        );
-                                                },
-                                              ),
-                                            )
                                           ],
                                         ),
                                       ],

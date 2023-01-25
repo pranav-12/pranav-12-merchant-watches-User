@@ -11,15 +11,13 @@ import '../../../domain/models/address_model.dart';
 import '../../../domain/models/cart_model.dart';
 import '../../../domain/models/order_model.dart';
 import '../../../infrastructure/others/orders/order_servises.dart';
-import '../successfull_message_screen.dart';
 
 class PaymentProvider with ChangeNotifier {
-  PaymentMethod? method;
 
-  void paymentMethodFunct(PaymentMethod type) {
-    method = type;
-    notifyListeners();
-  }
+  // void paymentMethodFunct(PaymentMethod type) {
+  //   method = type;
+  //   notifyListeners();
+  // }
 
   void placeOrder(List<ProductElement?> cartProducts, PaymentMethod type,
       BuildContext context, Address address) async {
@@ -40,27 +38,7 @@ class PaymentProvider with ChangeNotifier {
         totalPrice: totalPrice.value,
       );
       Response? response = await OrderServices().createOrder(order);
-      if (response!.statusCode == 201) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => ScreenSuccessFull(),
-            ),
-            (route) => false);
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //             SnackBar(
-        //               behavior: SnackBarBehavior.floating,
-        //               backgroundColor: Colors.redAccent,
-        //               shape: RoundedRectangleBorder(
-        //                   borderRadius: BorderRadius.circular(10)),
-        //               duration: const Duration(seconds: 1),
-        //               content: const Text('Your product Ordered '),
-        //             ),
-        //           );
-        // for (var i = 0; i < cartProducts.length; i++) {
-        //   log("dfasgasfg" + cartProducts[i]!.product!.toString());
-        //   await CartService().removeFromCart(cartProducts[i]!.product!);
-        // }
-      }
+      await CartService().getDataCart(context);
     } catch (e) {
       log(e.toString());
     }

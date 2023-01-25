@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/appication/other/address/address_provider.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 import 'package:merchant_watches/presentation/others/address/shipping_address.dart';
@@ -90,12 +91,22 @@ class ScreenAddress extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.28,
                       // width: MediaQuery.of(context).size.width / 2,
                       decoration: BoxDecoration(
-                        color: cartImageColor,
+                        color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Consumer<AddressProvider>(
+                          //   builder: (context, addressProv, child) => Checkbox(
+                          //     value: addressProv.checkBoxValu,
+                          //     onChanged: (value) {
+                          //       addressProv
+                          //           .valueForRadioButton(addressList[index]!);
+                          //     },
+                          //   ),
+                          // ),
                           Radio(
                             activeColor: Colors.green,
                             value: addressList[index],
@@ -167,7 +178,6 @@ class ScreenAddress extends StatelessWidget {
                 itemCount: addressList.length),
           ),
           ksizedBoxheight20,
-          ksizedBoxheight10,
           Consumer<AddressProvider>(
             builder: (context, addressProvider, child) => Visibility(
               visible: addressProvider.showSaveButton,

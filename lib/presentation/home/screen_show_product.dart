@@ -3,8 +3,8 @@ import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
+import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/presentation/cart/screen_cart.dart';
-import 'package:merchant_watches/presentation/others/address/screen_address.dart';
 import 'package:provider/provider.dart';
 
 class ScreenShowProductDetails extends StatelessWidget {
@@ -15,6 +15,9 @@ class ScreenShowProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await CartService().getDataCart(context);
+    });
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -88,6 +91,29 @@ class ScreenShowProductDetails extends StatelessWidget {
           ),
         ),
         ksizedBoxheight20,
+
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: "₹ ${product.price! + product.price! * 15 / 100}",
+                style: const TextStyle(
+                  color: Colors.grey,
+                  // fontSize: 20,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+              TextSpan(
+                text: "\t ₹ ${product.price!}",
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        ksizedBoxheight20,
 // row for showing the title and color of the watches
         Text(
           product.name!,
@@ -104,94 +130,107 @@ class ScreenShowProductDetails extends StatelessWidget {
           ),
         ),
         ksizedBoxheight20,
-// rate for watch
-        Text(
-          "₹ ${product.price}",
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        ksizedBoxheight20,
+
 // Row for addtoCart and Buy buttons
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Consumer<HomeProvider>(
-              builder: (context, homeProvider, child) => GestureDetector(
-                onTap: () => homeProvider.addToCart(product, context),
-                child: Container(
-                    height: size.height * 0.06,
-                    width: size.width * 0.4,
-                    decoration: BoxDecoration(
-                        color: searchIDForWishList(product, false) == true
-                            ? Colors.green
-                            : primaryBackgroundColor,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        searchIDForWishList(product, false) == true
-                            ? const Icon(
-                                Icons.done_outline_rounded,
-                                color: Colors.white,
-                              )
-                            : const SizedBox(),
-                        searchIDForWishList(product, false) == false
-                            ? const Text(
-                                "Add to Cart",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )
-                            : const Text(
-                                "Added",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )
-                      ],
-                    )),
-              ),
-            ),
-            ElevatedButton.icon(
-              icon: Icon(Icons.shopping_cart),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                fixedSize: Size(size.width / 2.5, 50),
-                backgroundColor: primaryBackgroundColor,
-                // padding: const EdgeInsets.all(15),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>ScreenCart(),
-                ));
-              },
-              label: const Text(
-                'Go to Cart',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            )
-          ],
-        ),
-        // ksizedBoxheight20,
-        // const Text(
-        //   'Overview',
-        //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //   children: [
+        //     Consumer<HomeProvider>(
+        //       builder: (context, homeProvider, child) => GestureDetector(
+        //         onTap: () => homeProvider.addToCart(product, context),
+        //         child: Container(
+        //             height: size.height * 0.06,
+        //             width: size.width * 0.4,
+        //             decoration: BoxDecoration(
+        //                 color: primaryBackgroundColor,
+        //                 borderRadius: BorderRadius.circular(10)),
+        //             child: Row(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 searchIDForWishList(product, false) == true
+        //                     ? const Icon(
+        //                         Icons.done_outline_rounded,
+        //                         color: Colors.white,
+        //                       )
+        //                     : const SizedBox(),
+        //                 searchIDForWishList(product, false) == false
+        //                     ? const Text(
+        //                         "Add to Cart",
+        //                         style: TextStyle(
+        //                             fontSize: 16,
+        //                             fontWeight: FontWeight.bold,
+        //                             color: Colors.white),
+        //                       )
+        //                     : const Text(
+        //                         "Added",
+        //                         style: TextStyle(
+        //                             fontSize: 16,
+        //                             fontWeight: FontWeight.bold,
+        //                             color: Colors.white),
+        //                       )
+        //               ],
+        //             )),
+        //       ),
+        //     ),
+        //     ElevatedButton(
+        //       style: ElevatedButton.styleFrom(
+        //         shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(10)),
+        //         fixedSize: Size(size.width / 2.5, 50),
+        //         backgroundColor: primaryBackgroundColor,
+        //         // padding: const EdgeInsets.all(15),
+        //       ),
+        //       onPressed: () {
+        //         homeProvider.addToCart(product, context);
+        //       },
+        //       child: const Text(
+        //         'Go to Cart',
+        //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        //       ),
+        //     )
+        //   ],
         // ),
-        // ksizedBoxheight20,
-        // ListView.separated(
-        //   shrinkWrap: true,
-        //   physics: const ScrollPhysics(),
-        //   itemBuilder: (context, index) => Container(
-        //     decoration: BoxDecoration(color: cartImageColor),
-        //     child: Image.network(overView[index]),
-        //   ),
-        //   separatorBuilder: (context, index) => const SizedBox(
-        //     height: 10,
-        //   ),
-        //   itemCount: overView.length,
-        // )
+
+        Consumer<HomeProvider>(
+          builder: (context, homeProvider, child) => searchIDForWishList(
+                      product, false) ==
+                  false
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    fixedSize: Size(size.width / 2.5, 50),
+                    backgroundColor: primaryBackgroundColor,
+                    // padding: const EdgeInsets.all(15),
+                  ),
+                  onPressed: () {
+                    homeProvider.addToCart(product, context);
+                  },
+                  child: const Text(
+                    'Add to Cart',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                )
+              : ElevatedButton.icon(
+                  icon: const Icon(Icons.shopping_cart),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    fixedSize: Size(size.width / 2.5, 50),
+                    backgroundColor: primaryBackgroundColor,
+                    // padding: const EdgeInsets.all(15),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ScreenCart(),
+                    ));
+                  },
+                  label: const Text(
+                    'Go to Cart',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+        )
       ]),
     );
   }
