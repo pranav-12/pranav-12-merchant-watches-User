@@ -60,8 +60,8 @@ class CartService with ChangeNotifier {
       );
       // log("response===" + response.data);
       // final data = CartModel.fromJson(jsonDecode(response.data));
-
-      Map<String, dynamic> data = json.decode(response.data);
+      // log(response.data);
+      Map<String, dynamic> data = await json.decode(response.data??[]);
 
       final val = CartProductModel.fromJson(data);
       log(val.toString());

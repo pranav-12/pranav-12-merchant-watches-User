@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:merchant_watches/presentation/others/orders/order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/constants.dart';
@@ -61,7 +62,8 @@ class ScreenProfile extends StatelessWidget {
                         ),
                       ),
                       Divider(),
-                      ListTile(minLeadingWidth: size.width*0.1,
+                      ListTile(
+                        minLeadingWidth: size.width * 0.1,
                         leading: SizedBox(
                           height: size.height * 0.1,
                           width: size.width * 0.1,
@@ -71,7 +73,11 @@ class ScreenProfile extends StatelessWidget {
                         ),
                         title: const Text('Your Orders'),
                         trailing: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ScreenOrders(),
+                            ));
+                          },
                           icon: const Icon(CupertinoIcons.chevron_forward),
                         ),
                       ),

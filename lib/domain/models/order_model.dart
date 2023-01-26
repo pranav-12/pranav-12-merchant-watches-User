@@ -2,6 +2,26 @@ import 'cart_model.dart';
 
 class OrderModel {
   OrderModel({
+    this.orders,
+  });
+
+  List<Order>? orders;
+
+  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+        orders: json["orders"] == null
+            ? []
+            : List<Order>.from(json["orders"]!.map((x) => Order.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "orders": orders == null
+            ? []
+            : List<dynamic>.from(orders!.map((x) => x.toJson())),
+      };
+}
+
+class Order {
+  Order({
     this.id,
     this.products,
     this.paymentType,
@@ -39,7 +59,7 @@ class OrderModel {
   dynamic cancelDate;
   int? totalPrice;
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+  factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["_id"],
         products: json["products"] == null
             ? []

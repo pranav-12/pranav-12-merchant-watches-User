@@ -6,6 +6,7 @@ import 'package:merchant_watches/appication/home/home_provider.dart';
 import 'package:merchant_watches/appication/other/address/address_provider.dart';
 import 'package:merchant_watches/appication/other/checkout_provider.dart';
 import 'package:merchant_watches/appication/other/logs/login_provider.dart';
+import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
 import 'package:merchant_watches/appication/product_details_provider/product_provider.dart';
 import 'package:merchant_watches/appication/wishlist/wishlist_provider.dart';
 import 'package:merchant_watches/appication/other/payment/payment_provider.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
          ChangeNotifierProvider(
           create: (context) => PaymentProvider(),
+        ),
+         ChangeNotifierProvider(
+          create: (context) => OrderProvider(),
         ),
       ],
       child: MaterialApp(

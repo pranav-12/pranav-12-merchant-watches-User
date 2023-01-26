@@ -38,9 +38,9 @@ class WishListServices with ChangeNotifier {
   }
 
   Future<void> getWishListData(BuildContext context) async {
-    log('$baseUrl$wishUrl/?userId=$userId');
     try {
       Response response = await dio.get('$wishUrl/?userId=$userId');
+      log("*********--------**************----"+response.data);
       Map<String, dynamic> data = await json.decode(response.data);
       // data = WishListModel.fromJson(map);
       wishDataList.value.clear();

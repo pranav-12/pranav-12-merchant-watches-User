@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/payment/payment_provider.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
-import 'package:merchant_watches/presentation/others/order_summary.dart';
+import 'package:merchant_watches/presentation/others/orders/order.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -52,7 +52,7 @@ class CheckOutProvider with ChangeNotifier {
     _razorPay.clear();
     Navigator.of(context!).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const OrderSummaryScreen(),
+        builder: (context) => const ScreenOrders(),
       ),
     );
     notifyListeners();

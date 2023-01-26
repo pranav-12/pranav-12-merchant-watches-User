@@ -13,7 +13,6 @@ import '../../../domain/models/order_model.dart';
 import '../../../infrastructure/others/orders/order_servises.dart';
 
 class PaymentProvider with ChangeNotifier {
-
   // void paymentMethodFunct(PaymentMethod type) {
   //   method = type;
   //   notifyListeners();
@@ -24,7 +23,7 @@ class PaymentProvider with ChangeNotifier {
     try {
       // String newTotalPrice = totalPrice.toString();
       // log(newTotalPrice);
-      final order = OrderModel(
+      final order = Order(
         addressId: address.id,
         userid: userId,
         products: cartProducts,
