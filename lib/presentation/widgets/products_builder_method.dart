@@ -33,11 +33,10 @@ ListView dataForProducts(List<ProductElement?> cart) {
                               borderRadius: BorderRadius.circular(10)),
                           child: Image.network(cartData!.image![0]!
 
-                              // imagevariation[index]
+                              
                               ),
                         ),
                         ksizedBoxWidth10,
-                        // Expanded the full details about the cart
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

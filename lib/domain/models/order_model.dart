@@ -56,7 +56,7 @@ class Order {
   String? userid;
   String? addressId;
   DateTime? deliveryDate;
-  dynamic cancelDate;
+  DateTime? cancelDate;
   int? totalPrice;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -82,7 +82,9 @@ class Order {
         deliveryDate: json["deliveryDate"] == null
             ? null
             : DateTime.parse(json["deliveryDate"]),
-        cancelDate: json["cancelDate"],
+        cancelDate: json["cancelDate"] == null
+            ? null
+            : DateTime.parse(json["cancelDate"]),
         totalPrice: json["totalPrice"],
       );
 
@@ -104,7 +106,7 @@ class Order {
         "address": address,
         "orderDate": orderDate?.toIso8601String(),
         "deliveryDate": deliveryDate?.toIso8601String(),
-        "cancelDate": cancelDate,
+        "cancelDate": cancelDate?.toIso8601String(),
         "totalPrice": totalPrice,
       };
 }

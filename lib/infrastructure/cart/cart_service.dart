@@ -10,7 +10,6 @@ import 'package:merchant_watches/domain/models/cart_model.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../appication/wishlist/wishlist_provider.dart';
 
 class CartService with ChangeNotifier {
   final dio = Dio();
@@ -61,7 +60,7 @@ class CartService with ChangeNotifier {
       // log("response===" + response.data);
       // final data = CartModel.fromJson(jsonDecode(response.data));
       // log(response.data);
-      Map<String, dynamic> data = await json.decode(response.data??[]);
+      Map<String, dynamic> data = await json.decode(response.data ?? []);
 
       final val = CartProductModel.fromJson(data);
       log(val.toString());

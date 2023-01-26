@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:merchant_watches/appication/home/home_provider.dart';
@@ -72,139 +71,150 @@ class ScreenHome extends StatelessWidget {
                   ValueListenableBuilder(
                     valueListenable: productDataList,
                     builder: (context, productsList, child) {
-                      return GridView.count(
-                        childAspectRatio: 0.70,
-                        mainAxisSpacing: 10,
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        crossAxisCount: 2,
-                        children: List.generate(
-                          productsList.length,
-                          (index) {
-                            final product = productsList[index];
-                            log(
-                              product.toString(),
-                            );
-                            return InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ScreenShowProductDetails(
-                                            product: productsList[index]!,
-                                            index: index),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 3),
-                                child: Card(
-                                  elevation: 10,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(10),
-                                          color: cartImageColor,
-                                          height: size.width / 2.6,
-                                          width: size.width,
-                                          child: Image.network(
-                                            product!.image![0]!,
-                                            filterQuality: FilterQuality.high,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                        ksizedBoxheight10,
-                                        Divider(
-                                            color: primaryBackgroundColor,
-                                            thickness: 1),
-                                        Container(
-                                          color: Colors.white,
-                                          // width: size.width / 3.5,
-                                          child: Text(
-                                            product.name!,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        ksizedBoxheight10,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text.rich(
-                                              TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        "₹ ${product.price! + product.price! * 15 / 100}",
-                                                    style: const TextStyle(
-                                                      color: Colors.grey,
-                                                      // fontSize: 20,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                    ),
-                                                  ),
-                                                  TextSpan(
-                                                    text:
-                                                        "\t ₹ ${product.price!}",
-                                                    style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                      return SingleChildScrollView(
+                        child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  
+                              mainAxisSpacing: 0,
+                              // mainAxisExtent: 2,
+                              crossAxisSpacing: 0,
+                              childAspectRatio: 0.7,
+                      
+                              crossAxisCount: 2,
+                            ),
+                            // mainAxisSpacing: 10,
+                            itemCount: productsList.length,
+                            //
+                      
+                            // physics: const ScrollPhysics(),
+                            // shrinkWrap: true,
+                            // crossAxisCount: 2,
+                            itemBuilder: (context, index) {
+                              final product = productsList[index];
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ScreenShowProductDetails(
+                                              product: productsList[index]!,
+                                              index: index),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.zero,
+                                  child: Card(
+                                    elevation: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            color: cartImageColor,
+                                            height: size.width / 2.6,
+                                            width: size.width,
+                                            child: Image.network(
+                                              product!.image![0]!,
+                                              filterQuality: FilterQuality.high,
+                                              fit: BoxFit.fill,
                                             ),
-                                            ValueListenableBuilder(
-                                              valueListenable: wishDataList,
-                                              builder:
-                                                  (context, wishdata, child) =>
-                                                      GestureDetector(
-                                                onTap: () async {
-                                                  homeProvider
-                                                      .addOrRemoveWishListFucn(
-                                                    product.id!,
-                                                    context,
-                                                  );
-                                                },
-                                                child: searchIDForWishList(
-                                                            product: product,
-                                                            wish: true,
-                                                            wisList:
-                                                                wishdata) ==
-                                                        true
-                                                    ? const Icon(
-                                                        Icons.favorite,
-                                                        size: 30,
-                                                        color: Colors.red,
-                                                      )
-                                                    : const Icon(
-                                                        size: 30,
-                                                        Icons.favorite_border,
+                                          ),
+                                          ksizedBoxheight10,
+                                          Divider(
+                                              color: primaryBackgroundColor,
+                                              thickness: 1),
+                                          Container(
+                                            color: Colors.white,
+                                            // width: size.width / 3.5,
+                                            child: Text(
+                                              product.name!,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          ksizedBoxheight10,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          "₹ ${product.price! + product.price! * 15 / 100}",
+                                                      style: const TextStyle(
+                                                        color: Colors.grey,
+                                                        // fontSize: 20,
+                                                        decoration: TextDecoration
+                                                            .lineThrough,
                                                       ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "\t ₹ ${product.price!}",
+                                                      style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                              ValueListenableBuilder(
+                                                valueListenable: wishDataList,
+                                                builder:
+                                                    (context, wishdata, child) =>
+                                                        GestureDetector(
+                                                  onTap: () async {
+                                                    homeProvider
+                                                        .addOrRemoveWishListFucn(
+                                                      product.id!,
+                                                      context,
+                                                    );
+                                                  },
+                                                  child: searchIDForWishList(
+                                                              product: product,
+                                                              wish: true,
+                                                              wisList: wishdata) ==
+                                                          true
+                                                      ? const Icon(
+                                                          Icons.favorite,
+                                                          size: 30,
+                                                          color: Colors.red,
+                                                        )
+                                                      : const Icon(
+                                                          size: 30,
+                                                          Icons.favorite_border,
+                                                        ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
+                              );
+                      
+                              //  List.generate(
+                      
+                              //     (index) {
+                      
+                              //     },
+                              //   ),
+                            }),
                       );
                     },
                   )
@@ -240,16 +250,4 @@ class ScreenHome extends StatelessWidget {
 
     return findProductId;
   }
-
-  // void addToCart(Product product, int index, BuildContext context) {
-  //   // log(value[index]["_id"].toString());
-
-  //   try {
-  //     log(userId.toString());
-  //     // log('cart------------$cart');
-  //     CartService().addToCart(product, context);
-  //   } catch (e) {
-  //     log("cartbuttonpressed:--=-=-=-=-$e");
-  //   }
-  // }
 }
