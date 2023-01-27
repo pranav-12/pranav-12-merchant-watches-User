@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
@@ -24,7 +23,7 @@ class OrderServices {
     log(order.toJson().toString());
     try {
       Response response = await dio.post("$orderUrl/", data: order.toJson());
-      log("RES:-----------" + response.data);
+      log("RES:----------- ${response.data}");
       return response;
     } on DioError catch (err) {
       log(err.message);

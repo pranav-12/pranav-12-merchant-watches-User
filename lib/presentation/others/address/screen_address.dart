@@ -98,15 +98,6 @@ class ScreenAddress extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Consumer<AddressProvider>(
-                          //   builder: (context, addressProv, child) => Checkbox(
-                          //     value: addressProv.checkBoxValu,
-                          //     onChanged: (value) {
-                          //       addressProv
-                          //           .valueForRadioButton(addressList[index]!);
-                          //     },
-                          //   ),
-                          // ),
                           Radio(
                             activeColor: Colors.green,
                             value: addressList[index],

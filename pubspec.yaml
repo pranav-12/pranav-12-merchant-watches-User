@@ -30,6 +30,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_bottom_navigation_bar: ^1.1.0
+  badges: ^3.0.2
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
@@ -78,13 +79,18 @@ flutter:
     - assets/cart/added.png
     - assets/pin.png
     - assets/credit-card.png
-    - assets/cards icons/mastercard.png
-    - assets/cards icons/razorpay.png
-    - assets/cards icons/rupay.png
-    - assets/cards icons/visa.png
     - assets/successfully-done.gif
     - assets/order.png
     - assets/ordersEmpty.png
+    - assets/images for banner/6d5d7ff3-d539-48c3-8540-9e00a0f57706.__CR0,0,970,600_PT0_SX970_V1___.jpg
+    - assets/images for banner/9c512087-a4ff-4041-b8d4-3404387b021c.__CR0,0,970,600_PT0_SX970_V1___.jpg
+    - assets/images for banner/3730-World-of-Titan_jaipur_Sales_6.png
+    - assets/images for banner/amazon-india-watch-sale-men-women-stylish-2016-removebg-preview (1).png
+    - assets/images for banner/b1e0e26c0de572143d4af79054dc4031_original-removebg-preview.png
+    - assets/images for banner/b1e0e26c0de572143d4af79054dc4031_original.avif
+    - assets/images for banner/offer-banner-desktop.png
+    - assets/images for banner/promo-code-for-watches.jpg
+    - assets/empty_checkout.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

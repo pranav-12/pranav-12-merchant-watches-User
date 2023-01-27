@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:merchant_watches/appication/bottom_nav_bar_provider.dart';
 import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/order_model.dart';
@@ -79,17 +80,24 @@ class ScreenOrderSummary extends StatelessWidget {
         ksizedBoxheight10,
         Provider.of<OrderProvider>(context, listen: false)
             .orderDetailsContainer(
-                id: order.id!, size: size, ),
+          id: order.id!,
+          size: size,
+        ),
         Visibility(
           visible: isNavigatedbysuccessFullScreen,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomElevatedButton(
-                function: () => Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => CustomBNavBar(),
-                    ),
-                    (route) => false),
+                function: () =>
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                      builder: (context) {
+                        Provider.of<BottomNavBarProvider>(context,
+                                listen: false)
+                            .selectedCurrentIndex = 0;
+
+                        return CustomBNavBar();
+                      },
+                    ), (route) => false),
                 title: 'Continue Shopping',
                 color: Colors.pinkAccent.shade200),
           ),

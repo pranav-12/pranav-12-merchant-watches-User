@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:merchant_watches/core/listfor_banners.dart';
 
 import '../../../constants/constants.dart';
 
@@ -13,7 +14,7 @@ class CarouselForImage extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: productDataList,
       builder: (context, value, child) => CarouselSlider(
-        items: List.generate(value.length, (index) {
+        items: List.generate(ListForbanners().banners.length, (index) {
           return Container(
             padding: const EdgeInsets.all(20),
             width: MediaQuery.of(context).size.width * 1,
@@ -23,7 +24,7 @@ class CarouselForImage extends StatelessWidget {
               image: DecorationImage(
                 alignment: Alignment.bottomCenter,
                 fit: BoxFit.contain,
-                image: NetworkImage(value[index]!.image![0]!),
+                image: AssetImage(ListForbanners().banners[index]),
               ),
             ),
           );
@@ -36,7 +37,7 @@ class CarouselForImage extends StatelessWidget {
           animateToClosest: true,
           enlargeCenterPage: true,
           viewportFraction: 0.9,
-          
+
           enlargeFactor: 0.2,
         ),
       ),

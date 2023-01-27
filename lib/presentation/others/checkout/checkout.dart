@@ -196,8 +196,18 @@ class ScreenCheckOut extends StatelessWidget {
                 ],
               )
             : Center(
-                heightFactor: 1,
-                child: Image.asset('assets/cart/empty_cart.png'),
+                // heightFactor: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/empty_checkout.png'),
+                    const Text(
+                      'No Orders Left',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
               ),
       ),
     );

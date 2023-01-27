@@ -13,6 +13,12 @@ import '../../../domain/models/order_model.dart';
 
 class OrderProvider with ChangeNotifier {
   OrderModel? orders;
+  bool isLooding = false;
+
+  void loading(bool val) {
+    isLooding = val;
+    notifyListeners();
+  }
 
   void assignOrders(OrderModel orderModel) {
     orders = orderModel;
