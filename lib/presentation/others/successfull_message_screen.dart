@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
+import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
+import 'package:merchant_watches/presentation/others/orders/order_summary.dart';
+import 'package:provider/provider.dart';
 
 class ScreenSuccessFull extends StatelessWidget {
   const ScreenSuccessFull({super.key});
@@ -8,7 +10,7 @@ class ScreenSuccessFull extends StatelessWidget {
   Widget build(BuildContext context) {
     // final size = MediaQuery.of(context).size;
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 4),
       () => const Text('Successfully Ordered'),
     );
     return Scaffold(
@@ -16,7 +18,9 @@ class ScreenSuccessFull extends StatelessWidget {
       tween: Tween(begin: 0.0, end: 2.0),
       onEnd: () => Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => CustomBNavBar(),
+            builder: (context) => ScreenOrderSummary(isNavigatedbysuccessFullScreen: true,
+                order:
+                    Provider.of<OrderProvider>(context).orders!.orders!.last),
           ),
           (route) => false),
       duration: const Duration(seconds: 3),

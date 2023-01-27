@@ -1,19 +1,17 @@
-
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:merchant_watches/domain/models/order_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../appication/other/orders/orders_provider.dart';
 import '../../../../constants/constants.dart';
 
 class DeliveryAddressContainer extends StatelessWidget {
-  const DeliveryAddressContainer({
-    Key? key,
-    required this.size,
-    required this.index,
-  }) : super(key: key);
-
+  const DeliveryAddressContainer(
+      {Key? key, required this.size,  required this.orders})
+      : super(key: key);
+  final Order orders;
   final Size size;
-  final int index;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,7 @@ class DeliveryAddressContainer extends StatelessWidget {
           ),
           Consumer<OrderProvider>(
             builder: (context, orderProv, child) {
-              final address = orderProv.orders!.orders![index];
+              final address = orders;
               return SizedBox(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

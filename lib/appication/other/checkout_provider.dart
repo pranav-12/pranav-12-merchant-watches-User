@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/payment/payment_provider.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 import 'package:merchant_watches/presentation/others/orders/order.dart';
+import 'package:merchant_watches/presentation/others/orders/order_summary.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -15,8 +16,8 @@ enum PaymentMethod { cod, online_payment }
 class CheckOutProvider with ChangeNotifier {
   BuildContext? context;
   Address? address;
+  int? index;
   final _razorPay = Razorpay();
-
   void payment(BuildContext context, Address address, int price) {
     var options = {
       'key': 'rzp_test_byX4xjQdkJOyzX',
@@ -41,20 +42,16 @@ class CheckOutProvider with ChangeNotifier {
   void _handlePaymentSuccess(
     PaymentSuccessResponse response,
   ) {
+    log("PaymentType₹₹₹₹₹₹₹₹₹₹₹₹₹₹-------- ${response.paymentId}");
     Provider.of<PaymentProvider>(context!, listen: false).placeOrder(
-        cartDataList.value, PaymentMethod.online_payment, context!, address!);
+        cartProducts: cartDataList.value,
+        type: PaymentMethod.online_payment,
+        context: context!,
+        address: address!,
+        );
     // Do something when payment succeeds
-    ScaffoldMessenger.of(context!).showSnackBar(
-      const SnackBar(
-        content: Text('Payment successfully'),
-      ),
-    );
     _razorPay.clear();
-    Navigator.of(context!).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const ScreenOrders(),
-      ),
-    );
+
     notifyListeners();
   }
 

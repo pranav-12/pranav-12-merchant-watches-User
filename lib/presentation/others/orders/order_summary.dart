@@ -5,14 +5,19 @@ import 'package:merchant_watches/domain/models/order_model.dart';
 import 'package:merchant_watches/domain/models/products_model.dart';
 import 'package:merchant_watches/presentation/home/screen_show_product.dart';
 import 'package:merchant_watches/presentation/others/orders/widgets/widget_orders.dart';
+import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
+import 'package:merchant_watches/presentation/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class ScreenOrderSummary extends StatelessWidget {
+  final bool isNavigatedbysuccessFullScreen;
   final Order order;
-  final int index;
 
-  const ScreenOrderSummary(
-      {super.key, required this.index, required this.order});
+  const ScreenOrderSummary({
+    super.key,
+    required this.order,
+    required this.isNavigatedbysuccessFullScreen,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class ScreenOrderSummary extends StatelessWidget {
               decoration: BoxDecoration(color: primaryBackgroundColor),
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: orderPro.orders!.orders![index].products!.length,
+                itemCount: order.products!.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
@@ -66,15 +71,29 @@ class ScreenOrderSummary extends StatelessWidget {
           ),
         ),
         Consumer<OrderProvider>(
-          builder: (context, orderProv, child) => orderProv
-              .containerForShowPaymentDetails(context, orderProv, index),
+          builder: (context, orderProv, child) =>
+              orderProv.containerForShowPaymentDetails(context, order.id!),
         ),
-        ksizedBoxheight20,
-        DeliveryAddressContainer(size: size, index: index),
-        ksizedBoxheight20,
+        ksizedBoxheight10,
+        DeliveryAddressContainer(size: size, orders: order),
+        ksizedBoxheight10,
         Provider.of<OrderProvider>(context, listen: false)
-            .orderDetailsContainer(size, index),
-        ksizedBoxheight20,
+            .orderDetailsContainer(
+                id: order.id!, size: size, ),
+        Visibility(
+          visible: isNavigatedbysuccessFullScreen,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomElevatedButton(
+                function: () => Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => CustomBNavBar(),
+                    ),
+                    (route) => false),
+                title: 'Continue Shopping',
+                color: Colors.pinkAccent.shade200),
+          ),
+        )
       ]),
     );
   }

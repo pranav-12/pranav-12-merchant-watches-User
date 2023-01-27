@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:merchant_watches/infrastructure/others/orders/order_servises.dart';
@@ -31,103 +30,157 @@ class OrderProvider with ChangeNotifier {
     return '${splitedDate.first} ${dateSplit.getRange(0, 2).join()} ${splitedDate[1]}';
   }
 
-  Container orderDetailsContainer(Size size, int index) {
+  Order findIdForGettingOrders(String id) {
+    Order? order;
+    for (var i = 0; i < orders!.orders!.length; i++) {
+      if (orders!.orders![i].id == id) {
+        order = orders!.orders![i];
+        break;
+      }
+    }
+    log("Orderprovider  order---=-=-=-=-=-=-=${order!.toJson()}");
+    return order;
+  }
+
+  Container orderDetailsContainer({
+    required Size size,
+    required String id,
+  }) {
+    final orderDetails = findIdForGettingOrders(id);
+    // final isCODTrue = (o);
+
+    // findId(id);
+
     return Container(
-      padding: const EdgeInsets.all(10),
-      height: size.width * 0.6,
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Consumer<OrderProvider>(
-        builder: (context, orderProv, child) {
-          final orderDetails = orderProv.orders!.orders![index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Order Details',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-              ),
-              Divider(
-                color: Colors.grey.shade300,
-                thickness: 1,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Delivery Date',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.all(10),
+        height: size.width * 0.63,
+        decoration: const BoxDecoration(color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Order Details',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            ),
+            Divider(
+              color: Colors.grey.shade300,
+              thickness: 1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Order Id',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  orderDetails.id.toString(),
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            ksizedBoxheight10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  orderDetails.orderStatus == 'confirmed'
+                      ? 'Delivery Date'
+                      : 'Cancel Date',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  orderDetails.orderStatus == 'confirmed'
+                      ? dateTime(
+                          orderDetails.deliveryDate!,
+                        )
+                      : dateTime(
+                          orderDetails.cancelDate!,
+                        ),
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            ksizedBoxheight10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Order Date',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  dateTime(
+                    orderDetails.orderDate,
                   ),
-                  Text(
-                    orderProv.dateTime(
-                      orderDetails.deliveryDate!,
-                    ),
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              ksizedBoxheight10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Order Date',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    orderProv.dateTime(
-                      orderDetails.orderDate,
-                    ),
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              ksizedBoxheight10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Payment Status',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    (orderDetails.paymentStatus == true) ? 'Paid' : 'Pending',
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              ksizedBoxheight10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Order Status',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    orderDetails.orderStatus.toString(),
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              ksizedBoxheight10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Payment Type',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    orderDetails.paymentType.toString(),
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
-    );
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            ksizedBoxheight10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Payment Status',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  orderDetails.paymentType == 'ONLINE_PAYMENT'
+                      ? 'Paid'
+                      : 'Pending',
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            ksizedBoxheight10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Order Status',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  orderDetails.orderStatus.toString(),
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            ksizedBoxheight10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Payment Type',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  orderDetails.paymentType.toString(),
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            ksizedBoxheight10,
+            // Visibility(
+            //   visible:
+            //       orderDetails.paymentType == 'ONLINE_PAYMENT',
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       const Text(
+            //         'Payment Id',
+            //         style: TextStyle(fontWeight: FontWeight.bold),
+            //       ),
+            //       Text(
+            //         paymentId?? orderDetails.id.toString(),
+            //         style: const TextStyle(color: Colors.grey),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ));
   }
 
   void cancelButtonFunc(BuildContext context, String id) {
@@ -201,8 +254,8 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Container containerForShowPaymentDetails(
-      BuildContext context, OrderProvider orderProv, int index) {
+  Container containerForShowPaymentDetails(BuildContext context, String id) {
+    final orders = findIdForGettingOrders(id);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -216,7 +269,7 @@ class OrderProvider with ChangeNotifier {
         children: [
           Text(
             // value.totalQuantity().toString(),
-            "PRICE DETAILS (${totalQty(orderProv.orders!.orders![index].products!)} items) ",
+            "PRICE DETAILS (${totalQty(orders.products!)} items) ",
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const Divider(
@@ -232,7 +285,7 @@ class OrderProvider with ChangeNotifier {
               ),
               Text(
                 // value.totalQuantity().toString(),
-                "₹ ${orderProv.orders!.orders![index].totalPrice! + orderProv.orders!.orders![index].totalPrice! * 15 / 100}",
+                "₹ ${orders.totalPrice! + orders.totalPrice! * 15 / 100}",
                 style: const TextStyle(fontSize: 18),
               ),
             ],
@@ -247,7 +300,7 @@ class OrderProvider with ChangeNotifier {
                 style: TextStyle(fontSize: 18),
               ),
               Text(
-                "- ₹ ${orderProv.orders!.orders![index].totalPrice! * 15 / 100}",
+                "- ₹ ${orders.totalPrice! * 15 / 100}",
                 style: const TextStyle(fontSize: 18, color: Colors.green),
               ),
             ],
@@ -265,7 +318,7 @@ class OrderProvider with ChangeNotifier {
                 style: TextStyle(fontSize: 18),
               ),
               Text(
-                "₹ ${orderProv.orders!.orders![index].totalPrice!}",
+                "₹ ${orders.totalPrice!}",
                 style: const TextStyle(fontSize: 18),
               ),
             ],

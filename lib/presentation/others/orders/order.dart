@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/infrastructure/others/orders/order_servises.dart';
 import 'package:merchant_watches/presentation/others/orders/order_summary.dart';
+import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:merchant_watches/presentation/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -23,13 +25,14 @@ class ScreenOrders extends StatelessWidget {
         title: const Text('Orders'),
       ),
       body: Consumer<OrderProvider>(
-        builder: (context, orderProv, child) => ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final order = orderProv.orders!.orders![index];
-              // log("ORSDER ${order.cancelDate}");
-              return orderProv.orders!.orders!.isNotEmpty
-                  ? Container(
+          builder: (context, orderProv, child) => orderProv
+                  .orders!.orders!.isNotEmpty
+              ? ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final order = orderProv.orders!.orders![index];
+                    // log("ORSDER ${order.cancelDate}");
+                    return Container(
                       padding: const EdgeInsets.all(15),
                       decoration: const BoxDecoration(color: Colors.white),
                       child: Column(
@@ -137,7 +140,10 @@ class ScreenOrders extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               ScreenOrderSummary(
-                                                  index: index, order: order),
+                                            isNavigatedbysuccessFullScreen:
+                                                false,
+                                            order: order,
+                                          ),
                                         ),
                                       );
                                     },
@@ -161,14 +167,27 @@ class ScreenOrders extends StatelessWidget {
                           )
                         ],
                       ),
-                    )
-                  : Center(
-                      child: Image.asset("assets/ordersEmpty.png"),
                     );
-            },
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: orderProv.orders!.orders!.length),
-      ),
+                  },
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: orderProv.orders!.orders!.length)
+              : Center(
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        "assets/ordersEmpty.png",
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: size.height * 0.28, left: size.width * 0.23),
+                        child: const Text(
+                          'No Orders',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
     );
   }
 }

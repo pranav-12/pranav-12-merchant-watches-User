@@ -153,8 +153,11 @@ class ScreenCheckOut extends StatelessWidget {
                               builder: (context, paymentProv, child) =>
                                   ElevatedButton(
                                 onPressed: () {
-                                  paymentProv.placeOrder(cartDataList.value,
-                                      PaymentMethod.cod, context, address);
+                                  paymentProv.placeOrder(
+                                      cartProducts: cartDataList.value,
+                                      type: PaymentMethod.cod,
+                                      context: context,
+                                      address: address);
                                 },
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(

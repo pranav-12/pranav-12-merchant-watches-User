@@ -43,8 +43,8 @@ class OrderServices {
       final orders = OrderModel.fromJson(data);
       Provider.of<OrderProvider>(context, listen: false).assignOrders(orders);
       log('orders--//////////////${Provider.of<OrderProvider>(context, listen: false).orders}');
-      log('respone------------------------' + response.data);
-      
+      log('respone------------------------+$response.data');
+
       return response;
     } on DioError catch (error) {
       log(error.message);
