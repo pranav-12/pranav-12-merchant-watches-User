@@ -29,7 +29,6 @@ class TextFormFieldForAddressing extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       maxLength: maxLength,
-      
       textCapitalization: TextCapitalization.words,
       smartQuotesType: SmartQuotesType.enabled,
       textInputAction: TextInputAction.next,

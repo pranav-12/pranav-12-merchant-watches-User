@@ -1,34 +1,37 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
+import 'package:merchant_watches/appication/home/home_provider.dart';
+import 'package:merchant_watches/appication/other/orders_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
+import 'package:merchant_watches/domain/models/order_model.dart';
 import 'package:merchant_watches/infrastructure/others/orders/order_servises.dart';
 import 'package:merchant_watches/presentation/others/orders/order_summary.dart';
+import 'package:merchant_watches/presentation/others/orders/widgets/widgets_for_showingthe_orderdproducts.dart';
 import 'package:merchant_watches/presentation/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
-
 import '../../widgets/loading_bar.dart';
 
 class ScreenOrders extends StatelessWidget {
   const ScreenOrders({super.key});
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      Provider.of<OrderProvider>(context, listen: false).loading(true);
+      Provider.of<HomeProvider>(context, listen: false).loading(true);
       await OrderServices().getOrders(context);
       Future.delayed(
           const Duration(seconds: 1),
-          () => Provider.of<OrderProvider>(context, listen: false)
-              .loading(false));
+          () =>
+              Provider.of<HomeProvider>(context, listen: false).loading(false));
     });
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
+// Appbar
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text('Orders'),
       ),
+// Body
       body: Consumer<OrderProvider>(
         builder: (context, orderProv, child) {
           return Provider.of<OrderProvider>(
@@ -40,7 +43,6 @@ class ScreenOrders extends StatelessWidget {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final order = orderProv.orders!.orders![index];
-                        // log("ORSDER ${order.cancelDate}");
                         return Container(
                           padding: const EdgeInsets.all(15),
                           decoration: const BoxDecoration(color: Colors.white),
@@ -48,6 +50,7 @@ class ScreenOrders extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+// Row contains the container For If order is confirmed or Not if Not it's Shows the Canceled Text
                               Row(
                                 children: [
                                   Container(
@@ -70,6 +73,7 @@ class ScreenOrders extends StatelessWidget {
                                   ),
                                 ],
                               ),
+// For Order Confirmed or Canceled
                               Padding(
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: Text(
@@ -81,68 +85,10 @@ class ScreenOrders extends StatelessWidget {
                                 ),
                               ),
                               ksizedBoxheight20,
-                              ListView.separated(
-                                  reverse: true,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    final product =
-                                        order.products![index]!.product!;
-                                    return Container(
-                                      padding: const EdgeInsets.all(10),
-                                      height: size.width * 0.3,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade300,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: size.width * 0.2,
-                                            child: Image.network(
-                                                product.image![0]!),
-                                          ),
-                                          // ksizedBoxWidth10,
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: size.width * 0.66,
-                                                child: Text(
-                                                  product.name!,
-                                                  style: const TextStyle(
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 17),
-                                                ),
-                                              ),
-                                              // ksizedBoxheight10,
-                                              SizedBox(
-                                                width: size.width * 0.66,
-                                                child: Text(
-                                                    product.description!,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 3),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return const SizedBox(
-                                      height: 10,
-                                    );
-                                  },
-                                  itemCount: order.products!.reversed.length),
+                              WidgetsForShowtheOrderedProducts(
+                                  order: order, size: size),
                               ksizedBoxheight20,
+// Row contains the elevated button View for view the Orderd Products and also the Cancel Button
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -171,7 +117,6 @@ class ScreenOrders extends StatelessWidget {
                                         function: () async {
                                           log("order cancel date:=-------${order.cancelDate.runtimeType}");
                                           log(order.id!);
-
                                           orderProv.cancelButtonFunc(
                                               context, order.id!);
                                         },
@@ -186,6 +131,7 @@ class ScreenOrders extends StatelessWidget {
                       },
                       separatorBuilder: (context, index) => const Divider(),
                       itemCount: orderProv.orders!.orders!.reversed.length)
+// if list is Empty the empty image shows
                   : Center(
                       child: Stack(
                         children: [

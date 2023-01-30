@@ -1,11 +1,12 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 import 'package:merchant_watches/infrastructure/others/address/address_servises.dart';
 import 'package:merchant_watches/presentation/others/address/shipping_address.dart';
+
+import '../../presentation/others/checkout/checkout.dart';
 
 class AddressProvider with ChangeNotifier {
   final formKeyForAddress = GlobalKey<FormState>();
@@ -15,28 +16,29 @@ class AddressProvider with ChangeNotifier {
   final stateController = TextEditingController();
   final placeController = TextEditingController();
   final pinController = TextEditingController();
-
   Address? address;
-
   bool showSaveButton = true;
 
+// For Enabling or show the Save Button
   void showSaveButtonFunc(bool val) {
     showSaveButton = val;
     notifyListeners();
   }
 
+// For Assign the Value For RadioButton
   void valueForRadioButton(Address add) {
     address = add;
     notifyListeners();
   }
 
+// For Selecting the Address For Purchase
   bool isSelected() {
     bool addressSelectionBool = false;
     addressSelectionBool = !addressSelectionBool;
-
     return addressSelectionBool;
   }
 
+// For submit the Address that led to CheckOUtScreen
   void submitButtonForAddress(
       {required BuildContext context,
       required ActionType type,
@@ -57,13 +59,11 @@ class AddressProvider with ChangeNotifier {
           duration: const Duration(seconds: 2),
         ),
       );
-
       notifyListeners();
     } else {
       if (formKeyForAddress.currentState!.validate()) {
         if (type == ActionType.addAddress) {
           final addAddress = Address(
-            // id: DateTime.now().microsecondsSinceEpoch.toString(),
             userId: userId,
             fullName: fullNameController.text,
             phone: phoneController.text,
@@ -108,7 +108,6 @@ class AddressProvider with ChangeNotifier {
             Response? response =
                 await AddressServices().upDateAddress(updateAddress);
             await AddressServices().getAllAddress();
-
             if (response!.statusCode == 202) {
               fullNameController.clear();
               phoneController.clear();
@@ -140,6 +139,7 @@ class AddressProvider with ChangeNotifier {
     }
   }
 
+// For Deleting the Address
   void deleteAddress(Address address, BuildContext context) {
     showBottomSheet(
       backgroundColor: cartImageColor,
@@ -151,69 +151,71 @@ class AddressProvider with ChangeNotifier {
         padding: const EdgeInsets.all(15),
         height: MediaQuery.of(context).size.height * 0.2,
         width: double.infinity,
-        child: Column(children: [
-          const Text(
-            'Do you want to delete?',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          ksizedBoxheight20,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.redAccent),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.clear)),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.green),
-                child: IconButton(
-                    onPressed: () async {
-                      try {
-                        Response? response =
-                            await AddressServices().deleteAddress(address);
-                        await AddressServices().getAllAddress();
-                        if (response == null) {
-                          log("!!!!!!!!!!responsel  $response");
+        child: Column(
+          children: [
+            const Text(
+              'Do you want to delete?',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            ksizedBoxheight20,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.redAccent),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.clear)),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.green),
+                  child: IconButton(
+                      onPressed: () async {
+                        try {
+                          Response? response =
+                              await AddressServices().deleteAddress(address);
+                          await AddressServices().getAllAddress();
+                          if (response == null) {
+                            log("!!!!!!!!!!responsel  $response");
+                          }
+                          log(response.toString());
+                        } catch (e) {
+                          log(e.toString());
                         }
-                        log(response.toString());
-                      } catch (e) {
-                        log(e.toString());
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          content: const Text(
-                            "Product deleted Successfully",
-                            style: TextStyle(color: Colors.white),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            content: const Text(
+                              "Product deleted Successfully",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
-                      );
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.check)),
-              )
-            ],
-          )
-        ]),
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.check)),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
-
     notifyListeners();
   }
 
+// For Getting Address Data From Api's
   void getDataFromAddres() async {
     try {
       Response? response = await AddressServices().getAllAddress();
@@ -225,7 +227,31 @@ class AddressProvider with ChangeNotifier {
     } catch (e) {
       log(e.toString());
     }
-
     notifyListeners();
+  }
+
+// For Proceed the Address Section Using in ElevatedButton
+  void proceedButton(
+      AddressProvider addressProvider, BuildContext context, Address? address) {
+    log(address.toString());
+    if (address == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.redAccent,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          content: const Text("Invalid Address"),
+        ),
+      );
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ScreenCheckOut(
+          address: address,
+        ),
+      ),
+    );
   }
 }

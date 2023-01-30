@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/core/listfor_banners.dart';
-
 import '../../../constants/constants.dart';
 
 class CarouselForImage extends StatelessWidget {

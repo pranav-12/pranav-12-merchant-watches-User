@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
 import 'package:merchant_watches/presentation/widgets/bottom_navigation_bar.dart';
@@ -24,6 +23,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
 
   bool isSignedIn = false;
 
+// For if user already loged in or not
   Future getValidationData() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     var obtainedUser = preferences.getBool("isSignIn");
@@ -64,8 +64,9 @@ class _ScreenSplashState extends State<ScreenSplash> {
                 progressColor: primaryFontColor,
                 onAnimationEnd: () => Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        isSignedIn == false ? ScreenSignIn() : CustomBNavBar(),
+                    builder: (context) => isSignedIn == false
+                        ? const ScreenSignIn()
+                        : CustomBNavBar(),
                   ),
                 ),
               )

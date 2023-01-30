@@ -1,31 +1,24 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/wishlist_model.dart';
-import 'package:provider/provider.dart';
-
-import '../../appication/wishlist/wishlist_provider.dart';
 
 class WishListServices with ChangeNotifier {
-  // WishListModel? data;
-
-  // List<WishListModel> dataList = [];
   final dio = Dio();
   WishListServices() {
     dio.options =
         BaseOptions(baseUrl: baseUrl, responseType: ResponseType.plain);
   }
 
+// For Add And Remove the Data's From WishList
   Future<Response?> addOrRemoveWishList(String productId) async {
     log(productId.toString());
     try {
       Response response = await dio
           .post('$wishUrl/', data: {"userId": userId, "product": productId});
-
       log(response.toString());
       return response;
     } on DioError catch (err) {
@@ -37,24 +30,18 @@ class WishListServices with ChangeNotifier {
     }
   }
 
+// For Get WishListData's From Api's
   Future<void> getWishListData(BuildContext context) async {
     try {
       Response response = await dio.get('$wishUrl/?userId=$userId');
-      log("*********--------**************----"+response.data);
+      log("*********--------**************----${response.data}");
       Map<String, dynamic> data = await json.decode(response.data);
       // data = WishListModel.fromJson(map);
       wishDataList.value.clear();
       wishDataList.value
           .addAll(WishListModel.fromJson(data).products!.reversed);
       wishDataList.notifyListeners();
-      log("wishList__________________" + wishDataList.value.toString());
-      // for (var i = 0; i < data!.products!.length; i++) {
-      //   if (data!.products![i]!.product!.category == "Smart Watches") {
-      //     log(data!.products![i].toString());
-      //   }
-      // }
-      // log(data!.products![0]!.product!.category.toString());
-      // Provider.of<WishListProvider>(context, listen: false).assignData(data!);
+      log("wishList__________________${wishDataList.value}");
     } on DioError catch (err) {
       log(err.message);
     } catch (e) {

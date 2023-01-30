@@ -1,11 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/domain/models/cart_model.dart';
-
-import '../../domain/models/products_model.dart';
-import '../../infrastructure/cart/cart_service.dart';
+import '../../../domain/models/products_model.dart';
+import '../../../infrastructure/cart/cart_service.dart';
 
 class QuantityWidget extends StatelessWidget {
   const QuantityWidget({super.key, this.index, this.product});
@@ -16,7 +13,7 @@ class QuantityWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     log(index.toString());
     return SizedBox(
-      // width: MediaQuery.of(context).size.width*0.3,
+// For Value Listnable builder is Generate the Cart Data's As a List
       child: ValueListenableBuilder(
         valueListenable: cartDataList,
         builder: (context, cart, child) {
@@ -33,12 +30,10 @@ class QuantityWidget extends StatelessWidget {
                       icon: const Icon(Icons.remove_circle_outline),
                     )
                   : const SizedBox(),
-              
-                   Text(cart[index!]!.qty!.toString()),
+              Text(cart[index!]!.qty!.toString()),
               IconButton(
                 onPressed: () async {
                   await CartService().addToCart(cartData!, context, 1);
-                  // ignore: use_build_context_synchronously
                   await CartService().getDataCart(context);
                 },
                 icon: const Icon(Icons.add_circle_outline_outlined),

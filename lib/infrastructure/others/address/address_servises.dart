@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 
-class AddressServices {
+class AddressServices with ChangeNotifier{
   final dio = Dio();
 
   AddressServices() {
@@ -16,6 +16,7 @@ class AddressServices {
     );
   }
 
+// For Add Address To BackEnd
   Future<Response?> addAddress(Address addressModel) async {
     try {
       Response response =
@@ -32,12 +33,12 @@ class AddressServices {
     return null;
   }
 
+// For Get All Address Datas From Api's
   Future<Response?> getAllAddress() async {
     try {
       Response response = await dio.get(
         "$addressUrl/?userId=$userId",
       );
-
       Map<String, dynamic> data = jsonDecode(response.data);
       final address = AddressModel.fromJson(data);
       addressDataList.value.clear();
@@ -52,10 +53,10 @@ class AddressServices {
     } catch (e) {
       log(e.toString());
     }
-
     return null;
   }
 
+// For Update Address  To BackEnd
   Future<Response?> upDateAddress(Address address) async {
     try {
       Response response =
@@ -71,6 +72,7 @@ class AddressServices {
     return null;
   }
 
+// For Delete Address To BackEnd
   Future<Response?> deleteAddress(Address address) async {
     try {
       Response response = await dio.delete("$addressUrl/${address.id}");
@@ -85,6 +87,7 @@ class AddressServices {
     return null;
   }
 
+// Find the Id For Get Address For Edit
   Address? getNoteByID(String id) {
     try {
       return addressDataList.value.firstWhere((address) => address!.id == id);

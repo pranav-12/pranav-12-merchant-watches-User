@@ -1,10 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:merchant_watches/appication/other/orders/orders_provider.dart';
+import 'package:merchant_watches/appication/other/orders_provider.dart';
 import 'package:merchant_watches/core/url.dart';
 import 'package:merchant_watches/domain/models/order_model.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +17,7 @@ class OrderServices {
     );
   }
 
+// For Add the Order Through Api's
   Future<Response?> createOrder(Order order) async {
     log(order.toJson().toString());
     try {
@@ -31,11 +30,11 @@ class OrderServices {
     } catch (e) {
       log("createOrder catch :________$e");
     }
-
     return null;
   }
 
-  Future<Response?> getOrders(BuildContext context) async {
+//For Getting Order Details from Api's
+  Future<Response?> getOrders(context) async {
     try {
       Response response = await dio.get("$orderUrl/");
       Map<String, dynamic> data = await json.decode(response.data);
@@ -43,7 +42,6 @@ class OrderServices {
       Provider.of<OrderProvider>(context, listen: false).assignOrders(orders);
       log('orders--//////////////${Provider.of<OrderProvider>(context, listen: false).orders}');
       log('respone------------------------+$response.data');
-
       return response;
     } on DioError catch (error) {
       log(error.message);
@@ -54,7 +52,8 @@ class OrderServices {
     return null;
   }
 
-  Future<Response?> cancelOrder(String id, BuildContext context) async {
+// For Cancel the Order that Sends the Details
+  Future<Response?> cancelOrder(String id, context) async {
     try {
       Response response = await dio.patch(orderUrl, data: {"orderId": id});
       Map<String, dynamic> data = await json.decode(response.data);
@@ -64,7 +63,6 @@ class OrderServices {
       return response;
     } on DioError catch (er) {
       log("DioError in Cancel Order ---------${er.response!.statusMessage}");
-
       return er.response;
     } catch (e) {
       log("ERROR in CancelOrder$e");

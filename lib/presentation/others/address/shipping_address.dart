@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:merchant_watches/appication/other/address/address_provider.dart';
+import 'package:merchant_watches/appication/other/address_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 import 'package:merchant_watches/infrastructure/others/address/address_servises.dart';
@@ -178,14 +178,10 @@ class ShippingAddress extends StatelessWidget {
                     fixedSize:
                         Size(MediaQuery.of(context).size.width / 2.5, 50),
                     backgroundColor: primaryBackgroundColor,
-                    // padding: const EdgeInsets.all(15),
                   ),
                   onPressed: () {
                     addProv.submitButtonForAddress(
                         context: context, type: type, address: address);
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //   builder: (context) => ShippingAddress(),
-                    // ));
                   },
                   child: const Text(
                     'Save',

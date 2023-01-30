@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/appication/other/checkout_provider.dart';
-import 'package:merchant_watches/appication/other/payment/payment_provider.dart';
+import 'package:merchant_watches/appication/other/payment_provider.dart';
 import 'package:merchant_watches/domain/models/address_model.dart';
 import 'package:merchant_watches/presentation/cart/widgets/order_details.dart';
 import 'package:merchant_watches/presentation/widgets/custom_button.dart';
 import 'package:merchant_watches/presentation/widgets/products_builder_method.dart';
 import 'package:provider/provider.dart';
 
-import '../../../appication/other/address/address_provider.dart';
+import '../../../appication/other/address_provider.dart';
 import '../../../constants/constants.dart';
 
 class ScreenCheckOut extends StatelessWidget {
@@ -139,15 +139,15 @@ class ScreenCheckOut extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                    ),
                     width: double.infinity,
                     height: size.width * 0.2,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Consumer<PaymentProvider>(
                               builder: (context, paymentProv, child) =>
@@ -162,10 +162,10 @@ class ScreenCheckOut extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(20)),
+                                            BorderRadius.circular(10)),
                                     backgroundColor: Colors.pink.shade400,
                                     elevation: 6,
-                                    fixedSize: const Size(150, 60)),
+                                    fixedSize: const Size(150, 50)),
                                 child: const Text('Cash on Delivery'),
                               ),
                             ),
@@ -182,10 +182,10 @@ class ScreenCheckOut extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(20)),
+                                              BorderRadius.circular(10)),
                                       backgroundColor: Colors.pink.shade400,
                                       elevation: 6,
-                                      fixedSize: const Size(150, 60)),
+                                      fixedSize: const Size(150, 50)),
                                   child: const Text('Online Transaction'),
                                 ),
                               ),

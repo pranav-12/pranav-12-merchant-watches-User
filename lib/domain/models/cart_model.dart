@@ -1,13 +1,7 @@
-// To parse this JSON data, do
-//
-//     final cartProductModel = cartProductModelFromJson(jsonString);
-
 import 'dart:convert';
-
 import 'package:merchant_watches/domain/models/products_model.dart';
 
 CartProductModel? cartProductModelFromJson(String str) => CartProductModel.fromJson(json.decode(str));
-
 String cartProductModelToJson(CartProductModel? data) => json.encode(data!.toJson());
 
 class CartProductModel {

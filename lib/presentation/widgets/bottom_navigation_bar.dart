@@ -1,13 +1,14 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
-import 'package:merchant_watches/appication/bottom_nav_bar_provider.dart';
-import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/presentation/cart/screen_cart.dart';
-import 'package:merchant_watches/presentation/home/screen_home.dart';
-import 'package:merchant_watches/presentation/profile/screen_profile.dart';
-import 'package:merchant_watches/presentation/wishlist/screen_wishlist.dart';
 import 'package:provider/provider.dart';
+import '../../appication/bottom_nav_bar_provider.dart';
+import '../../constants/constants.dart';
+import '../cart/screen_cart.dart';
+import '../home/screen_home.dart';
+import '../profile/screen_profile.dart';
+import '../wishlist/screen_wishlist.dart';
 
 class CustomBNavBar extends StatelessWidget {
   CustomBNavBar({
@@ -24,22 +25,23 @@ class CustomBNavBar extends StatelessWidget {
     ),
     BottomNavigationBarItem(
       label: 'Cart',
-      icon: Badge(
+      icon: badges.Badge(
         ignorePointer: true,
         position: BadgePosition.custom(top: -15, start: 20),
         badgeStyle: const BadgeStyle(
-          badgeColor: Colors.green,
+          badgeColor: Colors.black,
           shape: BadgeShape.circle,
         ),
         badgeContent: ValueListenableBuilder(
-            valueListenable: cartDataList,
-            builder: (context, value, child) => Text(
-                  value.length.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
+          valueListenable: cartDataList,
+          builder: (context, value, child) => Text(
+            value.isNotEmpty ? value.length.toString() : "",
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         child: const Icon(
           Icons.shopping_cart_outlined,
           size: 30,
@@ -88,7 +90,7 @@ class CustomBNavBar extends StatelessWidget {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             currentIndex: value.selectedCurrentIndex,
-            height: 60,
+            height: 70,
             onTap: (index) => value.bottomNavigationChange(index),
             snakeViewColor: primaryBackgroundColor,
           ),

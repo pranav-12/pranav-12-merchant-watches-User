@@ -1,88 +1,53 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
-import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
 
+import '../../domain/models/cart_model.dart';
 import '../../domain/models/products_model.dart';
+import '../../domain/models/wishlist_model.dart';
 
 class HomeProvider with ChangeNotifier {
   List addToCartList = [];
-
-  bool visible = true;
-  // List<bool> wishListClicked = [false];
-
   bool loadingBool = false;
 
+// For CircularLoading Bar
   void loading(bool val) {
     loadingBool = val;
     notifyListeners();
   }
 
-  void visibleONOrOf(bool val) {
-    visible = val;
-    notifyListeners();
-  }
-
-  void addToCart(Product product, BuildContext context) async {
-    try {
-      Response? response = await CartService().addToCart(product, context, 1);
-
-      await CartService().getDataCart(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 1),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor:
-              response!.statusCode == 201 ? Colors.green : Colors.red,
-          content:
-              //  response.statusCode == 201
-              response.statusCode == 201
-                  ? const Text("Product Added to Cart")
-                  : const Text("not added"),
-        ),
-      );
-      notifyListeners();
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  void addOrRemoveWishListFucn(String productId, BuildContext context) async {
-    try {
-      Response response =
-          await WishListServices().addOrRemoveWishList(productId) as Response;
-
-      await WishListServices().getWishListData(context);
-      log('ggg');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 1),
-            backgroundColor:
-                response.statusCode == 201 ? Colors.green : Colors.red,
-            content: response.statusCode == 201
-                //  response.statusCode == 201
-                ? const Text("Product Added to wishList")
-                : const Text("Product Removed From wishList")),
-      );
-      notifyListeners();
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
+// For Storing UserId
   void addUserId(String id) {
     userId = id;
-    log('userIDProvider========$userId');
     notifyListeners();
+  }
+
+
+// For Searchid From Wishlist and Cart
+  bool searchIDForWishList(
+      {required Product product,
+      required bool isWishList,
+      List<ProductElementForWishList?>? wisList,
+      List<ProductElement?>? cartElement}) {
+    bool findProductId = false;
+    if (isWishList == true) {
+      for (var i = 0; i < wisList!.length; i++) {
+        if (wisList[i]!.product!.id == product.id) {
+          return findProductId = true;
+        }
+      }
+    } else {
+      log('entry');
+      for (var i = 0; i < cartElement!.length; i++) {
+        log('---------------message');
+        if (cartElement[i]!.product!.id == product.id) {
+          return findProductId = true;
+        }
+      }
+      log("FIND__________________________ID$findProductId");
+    }
+
+    return findProductId;
   }
 }

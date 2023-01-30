@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../constants/constants.dart';
 
 class OrderDetails extends StatelessWidget {
@@ -13,13 +12,13 @@ class OrderDetails extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        // borderRadius: BorderRadius.circular(15),
       ),
       height: MediaQuery.of(context).size.height * 0.26,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+// Value Notifier For the TotalQuantity
           ValueListenableBuilder(
             valueListenable: totalQty,
             builder: (context, value, child) => Text(
@@ -32,6 +31,7 @@ class OrderDetails extends StatelessWidget {
             color: Colors.grey,
           ),
           ksizedBoxheight10,
+// Row Contains the Total MRP and its Value
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -42,7 +42,6 @@ class OrderDetails extends StatelessWidget {
               ValueListenableBuilder(
                 valueListenable: totalPrice,
                 builder: (context, value, child) => Text(
-                  // value.totalQuantity().toString(),
                   "₹ ${value + value * 15 / 100}",
                   style: const TextStyle(fontSize: 18),
                 ),
@@ -50,6 +49,7 @@ class OrderDetails extends StatelessWidget {
             ],
           ),
           ksizedBoxheight10,
+// Row Contains the Discount on MRP and its Value
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -71,6 +71,7 @@ class OrderDetails extends StatelessWidget {
           const Divider(
             color: Colors.grey,
           ),
+// Row Contains the Total Amount and its Value
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

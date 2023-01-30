@@ -19,7 +19,7 @@ class LoadingWidget extends StatelessWidget {
             color: primaryFontColor,
           ),
           ksizedBoxheight20,
-          Text('Loading.........')
+          const Text('Loading.........')
         ],
       ),
     );

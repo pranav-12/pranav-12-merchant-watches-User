@@ -1,9 +1,8 @@
 import 'dart:developer';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:merchant_watches/appication/other/logs/login_provider.dart';
+import 'package:merchant_watches/appication/home/home_provider.dart';
+import 'package:merchant_watches/appication/other/login_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
 import 'package:merchant_watches/infrastructure/others/login/login_services.dart';
 import 'package:merchant_watches/presentation/others/login/screen_otp.dart';
@@ -11,23 +10,26 @@ import 'package:merchant_watches/presentation/others/login/screen_signin.dart';
 import 'package:provider/provider.dart';
 
 class ScreenSignUp extends StatelessWidget {
-  ScreenSignUp({super.key});
+  const ScreenSignUp({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+// Body
       body: SafeArea(
         child: Consumer<Loginprovider>(
-            builder: (context, value, child) => value.isLoading == false
-                ? Form(
-                    key: value.formKeyForSignUp,
-                    child:
-                        ListView(padding: const EdgeInsets.all(10), children: [
+          builder: (context, value, child) => value.isLoading == false
+              ? Form(
+                  key: value.formKeyForSignUp,
+                  child: ListView(
+                    padding: const EdgeInsets.all(10),
+                    children: [
                       const Text(
                         'SignUp',
                         style: TextStyle(
                             fontSize: 40, fontWeight: FontWeight.bold),
                       ),
                       ksizedBoxheight20,
+// TextFormField For Name
                       TextFormField(
                         controller: value.fullNameController,
                         inputFormatters: [
@@ -54,6 +56,7 @@ class ScreenSignUp extends StatelessWidget {
                         },
                       ),
                       ksizedBoxheight20,
+// TextFormField For Email
                       TextFormField(
                         controller: value.emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -79,6 +82,7 @@ class ScreenSignUp extends StatelessWidget {
                         },
                       ),
                       ksizedBoxheight20,
+// TextFormField For Password
                       TextFormField(
                         controller: value.passwordController,
                         autocorrect: true,
@@ -106,6 +110,7 @@ class ScreenSignUp extends StatelessWidget {
                         },
                       ),
                       ksizedBoxheight20,
+// TextFormField For Confirm Password
                       TextFormField(
                         controller: value.confirmPasswordController,
                         autocorrect: true,
@@ -133,6 +138,7 @@ class ScreenSignUp extends StatelessWidget {
                         },
                       ),
                       ksizedBoxheight50,
+// Elevated Button For Submit the abouve Data's
                       Align(
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
@@ -145,7 +151,11 @@ class ScreenSignUp extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: () => signUpButton(context, value),
+                          onPressed: () =>
+                              Provider.of<Loginprovider>(context, listen: false)
+                                  .signUpButton(
+                            context,
+                          ),
                           child: const Text(
                             'SignUp',
                             style: TextStyle(
@@ -158,6 +168,7 @@ class ScreenSignUp extends StatelessWidget {
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.1),
+// Row contains the Text and TextButton
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -167,10 +178,12 @@ class ScreenSignUp extends StatelessWidget {
                                 fontWeight: FontWeight.bold, fontSize: 17),
                           ),
                           TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                              builder: (context) => ScreenSignIn(),
-                            )),
+                            onPressed: () =>
+                                Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const ScreenSignIn(),
+                              ),
+                            ),
                             child: const Text(
                               'SignIn',
                               style: TextStyle(
@@ -179,64 +192,17 @@ class ScreenSignUp extends StatelessWidget {
                           ),
                         ],
                       )
-                    ]),
-                  )
-                : Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: primaryBackgroundColor,
-                      color: primaryFontColor,
-                    ),
-                  )),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: primaryBackgroundColor,
+                    color: primaryFontColor,
+                  ),
+                ),
+        ),
       ),
     );
-  }
-
-  void signUpButton(BuildContext context, Loginprovider value) async {
-    if (value.fullNameController.text.isEmpty &&
-        value.emailController.text.isEmpty &&
-        value.passwordController.text.isEmpty &&
-        value.confirmPasswordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Invalid SignUp Details'),
-          backgroundColor: Colors.red,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } else {
-      if (value.formKeyForSignUp.currentState!.validate()) {
-        try {
-          // Response? response = await LoginServices.instance
-          //     .checkUser(value.emailController.text);
-
-          // if (response!.statusCode == 200) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(
-          //       content: const Text('User already exist'),
-          //       backgroundColor: Colors.red,
-          //       shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(15),),
-          //       behavior: SnackBarBehavior.floating,
-          //     ),
-          //   );
-          //   return;
-          // }
-        
-          log("message");
-          LoginServices().sendOTP(value.emailController.text);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ScreenOTPVerification(
-                  email: value.emailController.text, value: value),
-            ),
-          );
-        } catch (e) {
-          log("signUpButton: $e");
-          value.isLoadingFunc(false);
-        }
-      }
-    }
   }
 }

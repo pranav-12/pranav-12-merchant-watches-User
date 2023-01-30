@@ -1,12 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:merchant_watches/appication/home/home_provider.dart';
+import 'package:merchant_watches/appication/cart/cart_provider.dart';
+import 'package:merchant_watches/appication/wishlist/wishlist_provider.dart';
 import 'package:merchant_watches/constants/constants.dart';
-import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/infrastructure/wishlist/wishlist_servises.dart';
 import 'package:provider/provider.dart';
-
 import '../../domain/models/products_model.dart';
 import '../home/screen_show_product.dart';
 
@@ -16,14 +14,12 @@ class ScreenWishList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      log('message');
       await WishListServices().getWishListData(context);
-      log('message1');
     });
 
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
+// Appbar
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
         title: Row(
@@ -67,23 +63,23 @@ class ScreenWishList extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            // Row Contains the images and remove icon
+// Row Contains the Wishlist Data's
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  // height: MediaQuery.of(context).size.height*0.2,
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                      color: cartImageColor,
-                                      borderRadius: BorderRadius.circular(10)),
+                                    color: cartImageColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                   child: Image.network(
-                                    product!.image![0]!, fit: BoxFit.fill,
-                                    // imagevariation[index]
+                                    product!.image![0]!,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                                 ksizedBoxWidth10,
-                                // Expanded the full details about the cart
+// Expanded the full details about the cart
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment:
@@ -91,14 +87,14 @@ class ScreenWishList extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      // Row contains the Brand Name and WishList icon
-
+// Row contains the Brand Name and WishList icon
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+// For Product Name
                                           SizedBox(
                                             width: size.width * 0.4,
                                             child: Text(
@@ -110,23 +106,22 @@ class ScreenWishList extends StatelessWidget {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                          Consumer<HomeProvider>(
+                                          Consumer<WishListProvider>(
                                             builder: (context, value, child) =>
                                                 GestureDetector(
-                                                  onTap: () {
-                                                    value.addOrRemoveWishListFucn(
-                                                        product.id!, context);
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.favorite,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
+                                              onTap: () {
+                                                value.addOrRemoveWishListFucn(
+                                                    product.id!, context);
+                                              },
+                                              child: const Icon(
+                                                Icons.favorite,
+                                                color: Colors.red,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
-
-                                      // The Text for Color of the watch
+// The Text for Color of the watch
                                       SizedBox(
                                         width: size.width * 0.58,
                                         child: Text(
@@ -138,7 +133,7 @@ class ScreenWishList extends StatelessWidget {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      // row Contains the Rate and qty of the Watch
+// row Contains the Rate and qty of the Watch
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -151,14 +146,13 @@ class ScreenWishList extends StatelessWidget {
                                                 fontSize: 16),
                                           ),
                                           Container(
-                                            // width: size.width / 4.4,
                                             padding: const EdgeInsets.all(5),
                                             decoration: BoxDecoration(
                                               border: Border.all(),
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: Consumer<HomeProvider>(
+                                            child: Consumer<CartProvider>(
                                               builder: (context, value,
                                                       child) =>
                                                   searchIDForWishList(
@@ -171,7 +165,6 @@ class ScreenWishList extends StatelessWidget {
                                                                   product,
                                                                   context),
                                                           child: Row(
-                                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             children: [
                                                               const Text(
                                                                   'Add to'),

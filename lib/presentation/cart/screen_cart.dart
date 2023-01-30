@@ -4,7 +4,6 @@ import 'package:merchant_watches/infrastructure/cart/cart_service.dart';
 import 'package:merchant_watches/presentation/cart/widgets/order_details.dart';
 import 'package:merchant_watches/presentation/others/address/screen_address.dart';
 import 'package:merchant_watches/presentation/widgets/custom_button.dart';
-
 import '../../domain/models/products_model.dart';
 import '../widgets/products_builder_method.dart';
 
@@ -38,9 +37,8 @@ class ScreenCart extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ListView(children: [
+// This Fuction For Show the Cart Products in a Container
                       dataForProducts(cart),
-
-                      // Divider for separation
                       ksizedBoxheight20,
                       const OrderDetails(),
                       ksizedBoxheight20,
@@ -82,15 +80,4 @@ class ScreenCart extends StatelessWidget {
       ),
     );
   }
-}
-
-bool searchIDForWishList(Product product) {
-  bool findProductId = false;
-  for (var i = 0; i < wishDataList.value.length; i++) {
-    if (wishDataList.value[i]!.product!.id == product.id) {
-      return findProductId = true;
-    }
-  }
-
-  return findProductId;
 }
