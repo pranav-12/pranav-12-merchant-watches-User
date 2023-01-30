@@ -52,7 +52,6 @@ class WidgetForUserAddressDetailsAndAddAddress extends StatelessWidget {
             ),
             SizedBox(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ksizedBoxheight10,
