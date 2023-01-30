@@ -1,4 +1,4 @@
-# merchant_watches
+# merchant watches
 
 A new Flutter project.
 
